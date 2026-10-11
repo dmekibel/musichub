@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3d4173">
+<title>Prelude in C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #f6f1e7; --soft: rgba(246,241,231,.64); --faint: rgba(246,241,231,.32); --hair: rgba(246,241,231,.12); --glass: rgba(246,241,231,.07);
+          --home: #f2c14e; --away: #46b3a9; --tension: #e8607a; }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { background: linear-gradient(#3d4173, #33365f 70%, #2f3258); color: var(--ink); font: 400 15px/1.4 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  svg { display: block; overflow: visible; }
+  main { height: 100%; display: flex; flex-direction: column; padding: calc(16px + env(safe-area-inset-top)) 22px calc(18px + env(safe-area-inset-bottom)); }
+  .piece { font-size: 13px; font-weight: 650; color: var(--soft); letter-spacing: .01em; }
+  .piece b { color: var(--ink); }
+  .head { display: flex; align-items: center; gap: 14px; margin-top: 18px; }
+  .glyph { width: 46px; height: 46px; flex: none; }
+  .name { font: 800 76px/0.82 Archivo; font-stretch: 62%; letter-spacing: -0.025em; display: flex; align-items: flex-start; }
+  .name sup { font-size: .38em; margin: .04em 0 0 .03em; letter-spacing: 0; }
+  .name .acc { font-size: .62em; margin-top: .02em; }
+  .line2 { margin-top: 12px; font-size: 15px; color: var(--soft); }
+  .line2 b { font-weight: 700; }
+  .plot { position: relative; flex: 1; min-height: 260px; margin: 18px -22px 0; }
+  .plot svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .touch { position: absolute; inset: 0; touch-action: pan-y; cursor: crosshair; }
+  .tf { display: flex; gap: 6px; margin-top: 14px; }
+  .tf button { flex: 1; height: 36px; border-radius: 10px; font-size: 13.5px; font-weight: 700; color: var(--soft); transition: background .25s, color .25s; }
+  .tf button.on { background: var(--glass); color: var(--ink); }
+  .layers { display: flex; gap: 18px; margin-top: 14px; padding: 0 2px; }
+  .layers button { font-size: 13px; font-weight: 650; color: var(--faint); display: inline-flex; align-items: center; gap: 7px; transition: color .25s; }
+  .layers button i { width: 7px; height: 7px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .layers button.on { color: var(--ink); } .layers button.on i { background: currentColor; }
+  .dock { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+  .play { width: 58px; height: 58px; border-radius: 50%; background: var(--ink); color: #33365f; display: grid; place-items: center; flex: none; box-shadow: 0 10px 30px rgba(20,20,45,.35); transition: transform .15s; }
+  .play:active { transform: scale(.94); } .play svg { width: 22px; height: 22px; }
+  .dock .t { font-size: 13px; color: var(--soft); line-height: 1.35; } .dock .t b { display: block; font-size: 15px; color: var(--ink); font-weight: 700; }
+  text { font-family: Archivo; }
+</style>
+</head>
+<body>
+<main>
+  <div class="piece"><b>Prelude in C</b> · J. S. Bach · 1722</div>
+  <div class="head"><svg class="glyph" id="glyph" viewBox="-2.2 -2.2 4.4 4.4"></svg><div class="name" id="name"></div></div>
+  <p class="line2" id="line2"></p>
+  <div class="plot" id="plot"><svg id="svg"></svg><div class="touch" id="touch"></div></div>
+  <div class="tf" id="tf"><button class="on" data-g="bar">Bars</button><button data-g="phrase">Phrases</button><button data-g="section">Sections</button></div>
+  <div class="layers" id="layers"><button class="on" data-l="key"><i></i>Key</button><button class="on" data-l="form"><i></i>Form</button><button data-l="bass"><i></i>Bass</button><button class="on" data-l="marks"><i></i>Cadences &amp; squares</button></div>
+  <div class="dock"><button class="play" id="pp" aria-label="Play"></button><div class="t" id="dt"></div></div>
+</main>
+<script type="module" src="chart2.js?v=2"></script>
+</body>
+</html>
