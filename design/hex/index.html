@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0b26">
+<title>Honeycomb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #f6f0e4; --soft: rgba(246,240,228,.66); --faint: rgba(246,240,228,.34); --hair: rgba(246,240,228,.12); --glass: rgba(246,240,228,.06); }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { background: #0e0b26; color: var(--ink); font: 400 15px/1.4 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; display: flex; flex-direction: column; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  header { padding: calc(12px + env(safe-area-inset-top)) 20px 0; display: flex; justify-content: space-between; align-items: center; }
+  .ttl { font-size: 13px; font-weight: 650; color: var(--soft); } .ttl b { color: var(--ink); }
+  .keytag { font-size: 13px; font-weight: 700; padding: 5px 11px; border-radius: 999px; background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); transition: color .6s; }
+  #map { flex: 1; min-height: 0; display: block; width: 100%; touch-action: manipulation; }
+  .hx polygon { transition: fill .35s, stroke .35s, opacity .35s; }
+  .hx text { font: 700 0.42px Archivo; text-anchor: middle; dominant-baseline: central; pointer-events: none; transition: fill .35s; }
+  .lab { font: 800 0.62px Archivo; font-stretch: 62%; text-anchor: middle; dominant-baseline: central; pointer-events: none; letter-spacing: -0.01em; }
+  .panel { padding: 0 20px calc(14px + env(safe-area-inset-bottom)); }
+  .now { display: flex; align-items: flex-end; gap: 12px; }
+  .chord { font: 800 64px/0.84 Archivo; font-stretch: 62%; letter-spacing: -0.02em; }
+  .chord sup { font-size: .4em; letter-spacing: 0; vertical-align: .9em; }
+  .chord small { font-size: .3em; font-stretch: 100%; font-weight: 600; color: var(--soft); letter-spacing: 0; margin-left: 6px; }
+  .fn { margin-bottom: 6px; font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 999px; color: #17132f; }
+  .move { margin-top: 10px; font-size: 15.5px; color: var(--soft); min-height: 44px; } .move b { color: var(--ink); }
+  .zoom { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 12.5px; font-weight: 650; color: var(--soft); }
+  .zoom input { flex: 1; }
+  input[type=range] { -webkit-appearance: none; appearance: none; height: 28px; background: transparent; }
+  input[type=range]::-webkit-slider-runnable-track { height: 3px; border-radius: 2px; background: linear-gradient(to right, var(--ink) var(--p, 50%), var(--hair) var(--p, 50%)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9.5px; border-radius: 50%; background: var(--ink); box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+  .chips { display: flex; gap: 8px; margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
+  .chip { flex: none; height: 32px; padding: 0 13px; border-radius: 999px; font-size: 13px; font-weight: 650; color: var(--soft); background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); }
+  .chip.on { color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(246,240,228,.55); }
+  .strip { display: grid; grid-template-columns: repeat(35, 1fr); gap: 2px; height: 22px; align-items: end; margin-top: 12px; cursor: pointer; }
+  .strip i { height: 14px; border-radius: 2px; background: var(--c); opacity: .4; transition: height .2s, opacity .2s; }
+  .strip i.past { opacity: .9; } .strip i.on { height: 22px; opacity: 1; box-shadow: 0 0 0 1.5px var(--ink); }
+  .row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .row .t { font-size: 13px; font-weight: 650; color: var(--soft); width: 70px; } .row .t.r { text-align: right; }
+  .play { width: 58px; height: 58px; border-radius: 50%; background: var(--ink); color: #17132f; display: grid; place-items: center; box-shadow: 0 8px 26px rgba(0,0,0,.45); }
+  .play svg { width: 22px; height: 22px; }
+</style>
+</head>
+<body>
+<header><span class="ttl"><b>Prelude in C</b> · Bach</span><span class="keytag" id="key"></span></header>
+<svg id="map"></svg>
+<section class="panel">
+  <div class="now"><div class="chord" id="chord"></div><span class="fn" id="fn"></span></div>
+  <p class="move" id="move"></p>
+  <div class="zoom"><span>Chord</span><input type="range" id="zoom" min="0" max="100" value="18"><span>All keys</span></div>
+  <div class="chips"><button class="chip on" data-l="key">The key</button><button class="chip" data-l="squares">The three squares</button><button class="chip on" data-l="trail">Trail</button></div>
+  <div class="strip" id="strip"></div>
+  <div class="row"><span class="t" id="bl">bar 1</span><button class="play" id="pp" aria-label="Play"></button><span class="t r">35 bars</span></div>
+</section>
+<script type="module" src="hex.js?v=1"></script>
+</body>
+</html>
