@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MusicHub · the whole app</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root { --paper: #f3eee5; --ink: #22201c; --soft: #6f685e; --hair: #d9d0c2;
+          --today: #e9a72b; --explore: #1f9e76; --learn: #df5a3c; --lab: #3a2bdb; --pages: #8a5cc7; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--paper); color: var(--ink); font: 400 15px/1.45 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; padding: calc(30px + env(safe-area-inset-top)) 20px 70px; }
+  .wrap { max-width: 1240px; margin: 0 auto; }
+  h1 { font: 800 clamp(54px, 11vw, 112px)/0.86 Archivo; font-stretch: 62%; letter-spacing: -2px; }
+  .lede { max-width: 720px; margin-top: 14px; font-size: 18px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 18px; font-size: 13px; color: var(--soft); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 26px; height: 14px; border-radius: 4px; }
+  .t1 { background: var(--ink); } .t2 { box-shadow: inset 0 0 0 1.5px var(--ink); } .t3 { box-shadow: inset 0 0 0 1.5px var(--soft); opacity: .6; background-image: repeating-linear-gradient(90deg, transparent 0 3px, var(--paper) 3px 6px); }
+
+  h2 { font: 800 44px/0.9 Archivo; font-stretch: 62%; letter-spacing: -.5px; margin: 54px 0 6px; }
+  .sub { color: var(--soft); max-width: 680px; }
+
+  .rooms { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 20px; }
+  .room { border-radius: 14px; padding: 18px 16px 16px; background: color-mix(in srgb, var(--c) 10%, var(--paper)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent); }
+  .room h3 { display: flex; align-items: baseline; justify-content: space-between; font: 800 38px/0.9 Archivo; font-stretch: 62%; color: var(--c); }
+  .room h3 small { font: 500 13px Archivo; font-stretch: 100%; color: var(--soft); }
+  .room p { margin-top: 6px; font-size: 14px; color: var(--soft); }
+  .feats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .f { font-size: 13.5px; line-height: 1.25; padding: 6px 10px; border-radius: 7px; }
+  .f.t1 { background: var(--c); color: var(--on, #fff); }
+  .f.t2 { box-shadow: inset 0 0 0 1.5px var(--c); color: var(--ink); }
+  .f.t3 { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 55%, transparent); color: var(--soft); background-image: none; opacity: .85; border: 1px dashed transparent; }
+
+  .pages { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 20px; }
+  .page { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; padding: 10px; border-radius: 12px; background: #fbf8f2; box-shadow: inset 0 0 0 1px var(--hair); }
+  .sleeve { width: 56px; height: 56px; border-radius: 5px; background: var(--c); display: grid; place-items: center; overflow: hidden; }
+  .sleeve svg { width: 40px; height: 40px; }
+  .page b { display: block; font-weight: 700; }
+  .page span { font-size: 13px; color: var(--soft); }
+  .page .tier { font-size: 11.5px; color: var(--soft); }
+
+  .template { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 18px; counter-reset: s; }
+  .step { position: relative; padding: 12px 12px 12px 40px; border-radius: 10px; background: #fbf8f2; box-shadow: inset 0 0 0 1px var(--hair); font-size: 14px; }
+  .step::before { counter-increment: s; content: counter(s); position: absolute; left: 12px; top: 10px; font: 800 22px/1 Archivo; font-stretch: 62%; color: var(--pages); }
+  .step b { display: block; }
+  .step span { color: var(--soft); font-size: 13px; }
+
+  .screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 14px; margin-top: 20px; }
+  .scr { text-align: center; font-size: 13px; }
+  .phone { aspect-ratio: 9 / 18.5; border-radius: 14px; background: #fbf8f2; box-shadow: inset 0 0 0 1px var(--hair); padding: 8px; display: flex; flex-direction: column; gap: 5px; overflow: hidden; }
+  .phone i { display: block; border-radius: 3px; background: var(--c); }
+  .scr b { display: block; margin-top: 6px; font-weight: 600; }
+  .scr span { color: var(--soft); font-size: 12px; }
+  .note { margin-top: 50px; padding: 20px; border-radius: 14px; background: #fbf8f2; box-shadow: inset 0 0 0 1px var(--hair); max-width: 820px; }
+  .note b { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>The whole app</h1>
+  <p class="lede">All of music as one connected archive that does the math: hear any piece more deeply, travel through history and world music, learn step by step, and play with the deepest systems. This map comes before the design.</p>
+  <div class="legend"><span><i class="t1"></i>version 1</span><span><i class="t2"></i>next</span><span><i class="t3"></i>later</span></div>
+
+  <h2>Four rooms</h2>
+  <p class="sub">Four tabs, never a fifth. You lives in the corner. Search, the mini-player and one-tap pages work everywhere.</p>
+  <div class="rooms" id="rooms"></div>
+
+  <h2>Every thing in music gets a page</h2>
+  <p class="sub">Each page is a sleeve generated from its data: the field color is its harmonic color, the shape is its signature. Every name anywhere opens its page in one tap.</p>
+  <div class="pages" id="pages"></div>
+  <div class="template">
+    <div class="step"><b>Sleeve</b><span>identity, drawn from data</span></div>
+    <div class="step"><b>One line + Listen</b><span>what it is, hear it</span></div>
+    <div class="step"><b>Fingerprint</b><span>lenses: harmony, rhythm, melody, form, sound, story</span></div>
+    <div class="step"><b>Because…</b><span>connections, each with a reason</span></div>
+    <div class="step"><b>Compared to</b><span>"more chromatic than 92% of Baroque"</span></div>
+    <div class="step"><b>Read</b><span>sourced depth, one tap down</span></div>
+    <div class="step"><b>Learn it · Try it</b><span>into the Path and the Lab</span></div>
+  </div>
+
+  <h2>Sixteen screens to design</h2>
+  <p class="sub">The design system gets chosen to serve all sixteen, not one.</p>
+  <div class="screens" id="screens"></div>
+
+  <div class="note"><b>Data, honestly.</b> Public-domain classical plays in full with exact analysis. Recorded music: facts from MusicBrainz and Wikidata, listening through Spotify, Apple Music and YouTube links or licensed previews. Song harmony is curated by hand (progressions aren't copyrightable; recordings are). World traditions are sourced and cited.</div>
+</div>
+<script>
+const ROOMS = [
+  { name: "Today", c: "var(--today)", on: "#22201c", line: "Listen, every day",
+    f: [["Piece of the day, 2-min guided listen", 1], ["The Player, full screen", 1], ["Mini-player everywhere", 1], ["Harmony lens", 1], ["Story cards", 1], ["Tension + whole-piece strip", 1], ["This day in music", 1], ["A sound from somewhere new", 1], ["Rhythm lens", 2], ["Melody lens", 2], ["Form lens", 2], ["Sound lens", 2], ["Surprise", 2], ["Reduce slider", 2], ["Score lens", 2], ["Compare performances", 3], ["Annotations on moments", 3]] },
+  { name: "Explore", c: "var(--explore)", line: "History, world music, discovery",
+    f: [["Atlas: world map + decade dial", 1], ["River: all of music history", 1], ["Wall: every sleeve, sortable", 1], ["Search everything", 1], ["Trails: curated journeys", 2], ["Because… rabbit holes", 2], ["Artists on the map", 2], ["How a style spread", 2], ["Findings: statistics as sentences", 2], ["Instruments of the world", 2], ["Every decade's hits analyzed", 3]] },
+  { name: "Learn", c: "var(--learn)", line: "The path, the gym, the masters",
+    f: [["Path: one linear journey", 1], ["Ear gym, adaptive", 1], ["Spaced review", 1], ["Learn this, on any page", 2], ["Masters: Barry Harris, Bach, Jobim, Coltrane, maqam, raga", 2], ["Style courses", 2], ["Play-along with the mic", 2], ["Tracks by instrument and purpose", 2], ["Classroom mode", 3]] },
+  { name: "Lab", c: "var(--lab)", line: "Tools you can touch",
+    f: [["Harmony map (mDecks-level)", 1], ["Diminished squares (Barry Harris)", 1], ["Scale atlas: every scale on earth", 1], ["Keyboard + fretboard input", 1], ["Rhythm necklaces", 2], ["Tonnetz walk", 2], ["Voice-leading playground", 2], ["Reharmonizer", 2], ["Spiral array in 3D", 3], ["Export MIDI + score", 3]] },
+  { name: "Play + You", c: "var(--pages)", line: "Daily games, your corner, sharing",
+    f: [["Daily listen", 1], ["Saved sleeves + boards", 1], ["Ear profile", 1], ["Share card of any moment", 1], ["Guess the decade", 2], ["Guess the place", 2], ["Name the move (Wordle-style)", 2], ["Find the tension", 2], ["Taste fingerprint", 2], ["Public pages for every chord and style", 2], ["Auto-made shorts", 2], ["Your year in music", 3], ["Analyze your playlists", 3]] },
+];
+const roomsEl = document.getElementById("rooms");
+for (const r of ROOMS) {
+  const d = document.createElement("div"); d.className = "room"; d.style.setProperty("--c", r.c); if (r.on) d.style.setProperty("--on", r.on);
+  d.innerHTML = `<h3>${r.name}<small>${r.f.filter(f => f[1] === 1).length} in v1 · ${r.f.length} total</small></h3><p>${r.line}</p><div class="feats">${r.f.map(([t, k]) => `<span class="f t${k}">${t}</span>`).join("")}</div>`;
+  roomsEl.appendChild(d);
+}
+// pages, each with a tiny generated sleeve
+const SH = {
+  wheel: '<circle cx="20" cy="20" r="15" fill="none" stroke="#fff" stroke-width="2"/><circle cx="20" cy="5" r="3" fill="#fff"/><circle cx="33" cy="26" r="3" fill="#fff"/><circle cx="9" cy="29" r="3" fill="#fff"/>',
+  square: '<polygon points="25,6 34,25 15,34 6,15" fill="#fff"/>',
+  tri: '<polygon points="20,5 34,32 6,32" fill="#fff"/>',
+  map: '<path d="M4 26c6-10 10 2 16-6s10-2 16-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="20" r="4" fill="#fff"/>',
+  river: '<path d="M4 10c10 0 10 10 20 10s8 10 12 10M14 15c6 8 12 6 22 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+  neck: '<polygon points="20,4 33,14 30,32 12,34 6,16" fill="none" stroke="#fff" stroke-width="2.5"/><circle cx="20" cy="4" r="3" fill="#fff"/><circle cx="30" cy="32" r="3" fill="#fff"/>',
+  scale: '<polygon points="20,4 30,10 34,22 26,34 12,33 6,20 10,9" fill="#fff" opacity=".9"/>',
+  person: '<circle cx="20" cy="14" r="7" fill="#fff"/><path d="M7 36c2-9 7-12 13-12s11 3 13 12" fill="#fff"/>',
+  disc: '<circle cx="20" cy="20" r="15" fill="#fff"/><circle cx="20" cy="20" r="4" fill="var(--c)"/>',
+};
+const PAGES = [
+  ["Piece", "Prelude in C, Giant Steps", "var(--lab)", "wheel", 1],
+  ["Artist", "Bach, Coltrane, Jobim, Fela", "var(--learn)", "person", 1],
+  ["Style", "bebop, bossa nova, gamelan", "var(--explore)", "river", 1],
+  ["Place + time", "Havana 1950s, Lagos 1975", "var(--today)", "map", 1],
+  ["Chord + progression", "diminished 7th, ii–V–I", "var(--lab)", "square", 1],
+  ["Scale, maqam, raga", "dorian, Hijaz, Yaman", "var(--explore)", "scale", 1],
+  ["Rhythm + form", "son clave, 12-bar blues", "var(--learn)", "neck", 2],
+  ["System", "Barry Harris, Lendvai", "var(--pages)", "square", 2],
+  ["Instrument", "oud, kora, Hammond B-3", "var(--today)", "tri", 2],
+  ["Album + performance", "Kind of Blue, Gould 1955", "var(--lab)", "disc", 2],
+  ["Scene, label, event", "Blue Note, CBGB, 1913", "var(--explore)", "map", 3],
+  ["Film + game music", "Final Fantasy X, Star Wars", "var(--learn)", "wheel", 3],
+];
+const pagesEl = document.getElementById("pages");
+for (const [n, ex, c, sh, t] of PAGES) {
+  const d = document.createElement("div"); d.className = "page"; d.style.setProperty("--c", c);
+  d.innerHTML = `<div class="sleeve"><svg viewBox="0 0 40 40">${SH[sh]}</svg></div><div><b>${n}</b><span>${ex}</span><div class="tier">${["", "version 1", "next", "later"][t]}</div></div>`;
+  pagesEl.appendChild(d);
+}
+// sixteen screens as tiny wireframes: [name, hint, color, blocks: [height%, width%]]
+const SCR = [
+  ["Today", "one card + the day's extras", "var(--today)", [[34, 100], [6, 70], [10, 100], [10, 100], [10, 100]]],
+  ["Player", "full + mini", "var(--today)", [[46, 100], [8, 60], [5, 90], [4, 100], [9, 40]]],
+  ["Page", "one template, every noun", "var(--pages)", [[30, 100], [6, 80], [16, 100], [10, 100], [8, 100]]],
+  ["Atlas", "map + decade dial", "var(--explore)", [[64, 100], [6, 100], [12, 100]]],
+  ["River", "history timeline", "var(--explore)", [[12, 100], [12, 80], [12, 90], [12, 60], [12, 100]]],
+  ["Wall", "sleeve grid + sort", "var(--explore)", [[6, 60], [20, 100], [20, 100], [20, 100]]],
+  ["Trail", "a guided story", "var(--explore)", [[40, 100], [8, 90], [8, 80], [16, 100]]],
+  ["Search", "everything", "var(--pages)", [[7, 100], [10, 100], [10, 100], [10, 100], [10, 100]]],
+  ["Path", "the lesson map", "var(--learn)", [[12, 40], [12, 40], [12, 40], [12, 40], [12, 40]]],
+  ["Lesson", "step player", "var(--learn)", [[8, 100], [44, 100], [12, 100], [10, 100]]],
+  ["Ear gym", "game", "var(--learn)", [[40, 100], [14, 48], [14, 48]]],
+  ["Lab tool", "canvas + controls", "var(--lab)", [[60, 100], [8, 100], [14, 100]]],
+  ["Compare", "two up", "var(--pages)", [[34, 48], [34, 48], [14, 100]]],
+  ["You", "saved, ear, taste", "var(--pages)", [[18, 100], [12, 100], [24, 100]]],
+  ["First run", "your purpose", "var(--today)", [[30, 100], [10, 100], [10, 100], [10, 100]]],
+  ["Share card", "a moment as an image", "var(--lab)", [[70, 100], [8, 60]]],
+];
+const scrEl = document.getElementById("screens");
+for (const [n, h, c, blocks] of SCR) {
+  const d = document.createElement("div"); d.className = "scr"; d.style.setProperty("--c", c);
+  d.innerHTML = `<div class="phone">${blocks.map(([hh, ww], i) => `<i style="height:${hh}%;width:${ww}%;opacity:${i === 0 ? 1 : .35}${n === "Path" ? `;margin-left:${(i % 2) * 50}%` : ""}${n === "Compare" && i < 2 ? ";display:inline-block" : ""}"></i>`).join("")}</div><b>${n}</b><span>${h}</span>`;
+  scrEl.appendChild(d);
+}
+</script>
+</body>
+</html>

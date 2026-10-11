@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sleeve · Blue Note C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  /* Blue Note C, "Sleeve". Every moment of the piece is a square record sleeve: one flat field in the
+     color of the harmony, the chord as one solid shape, its name set huge and cropped. Under it, the
+     now-playing layout everyone already knows (Apple Music, Spotify): title, one line of meaning,
+     a scrubber with the sections named, and three buttons. */
+  :root { --bg: #0f0e0d; --cream: #f6f0e5; --mute: rgba(246,240,229,.55); --hair: rgba(246,240,229,.16); }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--bg); color: var(--cream); font: 400 16px/1.45 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .screen { min-height: 100dvh; display: flex; flex-direction: column; padding: calc(14px + env(safe-area-inset-top)) 22px calc(24px + env(safe-area-inset-bottom)); }
+
+  .top { display: flex; align-items: center; justify-content: space-between; height: 44px; }
+  .back { width: 36px; height: 36px; display: grid; place-items: center; color: var(--mute); }
+  .back svg { width: 22px; height: 22px; }
+  .tabs { display: flex; gap: 2px; background: rgba(246,240,229,.08); border-radius: 999px; padding: 3px; }
+  .tabs span { font-size: 14px; font-weight: 500; padding: 6px 14px; border-radius: 999px; color: var(--mute); }
+  .tabs .on { background: var(--cream); color: var(--bg); }
+
+  .sleeve { position: relative; margin-top: 14px; aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: var(--field); color: var(--ink); box-shadow: 0 30px 70px rgba(0,0,0,.55); }
+  .sleeve::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .14; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .badge { position: absolute; left: 16px; top: 16px; z-index: 3; font: 700 13px/1 Archivo; font-stretch: 85%; letter-spacing: .2px; padding: 6px 9px 6px; border-radius: 5px; background: var(--ink); color: var(--field); }
+  .meta { position: absolute; left: 16px; top: 48px; z-index: 3; font-size: 13px; font-weight: 500; color: var(--soft); }
+  .clock { position: absolute; right: 2%; top: 4%; width: 60%; z-index: 1; }
+  .name { position: absolute; left: 12px; bottom: -0.16em; z-index: 2; display: flex; align-items: flex-start; font: 800 196px/0.82 Archivo; font-stretch: 62%; letter-spacing: -4px; white-space: nowrap; }
+  .name .sharp { width: .27em; height: .62em; margin: .06em 0 0 .02em; }
+  .name .q { font-size: .36em; line-height: 1; margin: .08em 0 0 .03em; letter-spacing: -1px; }
+  .over { position: absolute; right: 16px; bottom: 16px; z-index: 3; font: 600 15px Archivo; color: var(--ink); text-align: right; }
+  .over b { display: block; font: 800 34px/0.9 Archivo; font-stretch: 62%; letter-spacing: -.5px; }
+
+  .info { margin-top: 24px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
+  .word { font: 800 40px/0.95 Archivo; font-stretch: 70%; letter-spacing: -.5px; color: var(--accent); }
+  .line { font-size: 18px; margin-top: 4px; }
+  .desc { font-size: 14px; color: var(--mute); margin-top: 4px; }
+  .num { text-align: right; font-size: 13px; color: var(--mute); white-space: nowrap; }
+  .num b { display: block; font: 700 30px/1 Archivo; font-stretch: 70%; color: var(--cream); }
+
+  .next { margin-top: auto; display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+  .thumb { width: 52px; height: 52px; border-radius: 4px; background: var(--nfield); color: var(--nink); display: grid; place-items: center; font: 800 30px/1 Archivo; font-stretch: 62%; flex: none; }
+  .next p { font-size: 13px; color: var(--mute); }
+  .next strong { display: block; font-size: 17px; font-weight: 600; color: var(--cream); }
+  .next .arrow { margin-left: auto; color: var(--mute); font-size: 13px; text-align: right; }
+  .scrub { padding-top: 22px; }
+  .rail { position: relative; height: 4px; border-radius: 2px; background: var(--hair); }
+  .rail .fill { position: absolute; inset: 0 auto 0 0; border-radius: 2px; background: var(--cream); }
+  .rail .knob { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--cream); }
+  .rail .tick { position: absolute; top: -3px; width: 2px; height: 10px; background: var(--bg); }
+  .labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; color: var(--mute); }
+  .labels b { color: var(--cream); font-weight: 600; }
+
+  .transport { display: flex; align-items: center; justify-content: center; gap: 44px; margin-top: 20px; }
+  .step { width: 44px; height: 44px; display: grid; place-items: center; color: var(--cream); }
+  .step svg { width: 26px; height: 26px; }
+  .play { width: 76px; height: 76px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; }
+  .play svg { width: 28px; height: 28px; margin-left: 4px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="top">
+    <span class="back" aria-label="Library"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <div class="tabs"><span class="on">Chord</span><span>Map</span><span>Score</span></div>
+    <span class="back" aria-hidden="true"></span>
+  </div>
+
+  <div class="sleeve" id="sleeve">
+    <span class="badge">MusicHub</span>
+    <span class="meta" id="meta"></span>
+    <svg class="clock" id="clock"></svg>
+    <div class="name" id="name"></div>
+    <div class="over" id="over"></div>
+  </div>
+
+  <div class="info">
+    <div>
+      <p class="word" id="word"></p>
+      <p class="line" id="line"></p>
+      <p class="desc" id="desc"></p>
+    </div>
+    <div class="num"><b id="barno"></b>of 35</div>
+  </div>
+
+  <div class="next" id="next"></div>
+
+  <div class="scrub">
+    <div class="rail" id="rail"><span class="fill" id="fill"></span><span class="knob" id="knob"></span></div>
+    <div class="labels"><b id="section"></b><span>Prelude in C · Bach</span></div>
+    <div class="transport">
+      <span class="step" aria-label="Previous bar"><svg viewBox="0 0 24 24"><path d="M6 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 5.5v13L9 12z" fill="currentColor"/></svg></span>
+      <span class="play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z" fill="#0f0e0d"/></svg></span>
+      <span class="step" aria-label="Next bar"><svg viewBox="0 0 24 24"><path d="M18 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 5.5v13L15 12z" fill="currentColor"/></svg></span>
+    </div>
+  </div>
+</div>
+<script type="module">
+import { pickBar, applyTheme, chordHTML, drawClock, sectionOf, SECTIONS, BARS, THEME } from "./shared.js";
+const b = pickBar();
+applyTheme(b);
+document.documentElement.style.setProperty("--accent", b.fn === "D" ? "#8f82ff" : getComputedStyle(document.documentElement).getPropertyValue("--field"));
+drawClock(document.getElementById("clock"), b, { r: 132 });
+document.getElementById("name").innerHTML = chordHTML(b);
+document.getElementById("over").innerHTML = `over<b>${b.bass.replace("b", "♭")}</b>`;
+document.getElementById("meta").textContent = `Bar ${b.bar}`;
+document.getElementById("word").textContent = b.word;
+document.getElementById("line").textContent = b.line;
+document.getElementById("desc").textContent = `${b.desc} · ${b.rn}`;
+document.getElementById("barno").textContent = b.bar;
+document.getElementById("section").textContent = sectionOf(b.bar).title;
+const pct = ((b.bar - 0.5) / 35) * 100;
+document.getElementById("fill").style.width = pct + "%";
+document.getElementById("knob").style.left = pct + "%";
+// up next: where this moment goes
+const NEXT = { 12: [13, "Up next", "resolves"], 13: [15, "Two bars on", "comes home"], 15: [12, "Earlier", "the pull"] };
+const [nb, label, verb] = NEXT[b.bar];
+const n = BARS[nb], nt = THEME[n.fn];
+const nextEl = document.getElementById("next");
+nextEl.style.setProperty("--nfield", nt.field); nextEl.style.setProperty("--nink", nt.ink);
+nextEl.innerHTML = `<span class="thumb">${n.root}${n.q === "m" ? "m" : ""}</span><p>${label} · bar ${n.bar}<strong>${n.desc.replace(" over", ", over")}</strong></p><span class="arrow">${n.word}<br>${verb}</span>`;
+const rail = document.getElementById("rail");
+for (const s of SECTIONS.slice(1)) { const t = document.createElement("span"); t.className = "tick"; t.style.left = ((s.from - 1) / 35) * 100 + "%"; rail.appendChild(t); }
+</script>
+</body>
+</html>
