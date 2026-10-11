@@ -257,3 +257,27 @@ section → piece. Every lens regroups at that grain (strip chips merge, clock t
 shows the dwell time per region). A Sapp-style triangle is the "all grains at once" view. Lens
 switches are staged morphs with stable chord IDs. Controls follow the OP-1 rule: one control, one
 mark, one meaning.
+
+---
+
+## A7. Full read of every page, done myself (2026-10-11, after David asked "did you actually go through his concepts?")
+Pages read: home, Colours, Functions, Squares, Alpha cubes, Hypercubes, Metaprism, Arcades, Atria, Recap, Diminished cubes,
+Higher dimensions, Cook Book index. What the earlier summary missed, and what matters most for MusicHub:
+- **Function families, not single chords.** "All purple chords are dominant to C": G (the dominant), D♭ (tritone sub), B♭
+  (backdoor) and E all pull to C, because they sit a minor third apart. Each function is a *family of four* chords a
+  minor third apart. That's the real payoff of the three squares: substitution = staying in the same family.
+- **The hypercube is a 2D chart in disguise.** On his Geometry page, left/right = the minor-third cycle and up/down =
+  1-4-5. So the 12 major chords fit a 4 × 3 grid that wraps around (a torus): columns = the four keys a minor third
+  apart (C, E♭, G♭, A), rows = tonic / dominant / subdominant families. A key change to the dominant = the grid slides
+  one row. (Our own derivation of the math; his pictures and names stay his.)
+- **The key cube (his hourglass).** I and vi in the waist, V and iii above, IV and ii below: function = height.
+- **Arcades** = whole-tone families of keys (six keys); moving along one changes hypercube, so the same chord takes a
+  new function (C → A: tonic-to-tonic in one view, subdominant of E in another).
+- **Atria** hold the three alpha cubes (the tonic cubes) and the three diminished cubes.
+- **Diminished cubes:** two diminished squares turned 90° → the vii° triad and Barry Harris's 8-note 6th-diminished scale.
+- **Metaprism worked examples:** C7–Em7–D7 (Em is iii in C, then heard as ii in D, "within one arcade");
+  C7–Fm–G7 (F minor as the minor backdoor carries you to G: "we've traversed the metaprism").
+- **Still missing on his side:** the advanced pages are short; the Cook Book has 4 entries ("more coming soon"); no
+  real pieces played in time.
+- **IP flag (confirmed):** his function colours are orange tonic / green subdominant / purple dominant. MusicHub's
+  saffron / green / indigo are too close. Recolour before any public launch.

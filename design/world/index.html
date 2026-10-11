@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0b26">
+<title>Harmony World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #f6f0e4; --soft: rgba(246,240,228,.66); --faint: rgba(246,240,228,.34); --hair: rgba(246,240,228,.12); --glass: rgba(246,240,228,.06); }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { background: #0e0b26; color: var(--ink); font: 400 15px/1.4 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .top { position: fixed; left: 0; right: 0; top: 0; z-index: 2; padding: calc(12px + env(safe-area-inset-top)) 20px 26px; background: linear-gradient(#0e0b26 40%, rgba(14,11,38,0)); pointer-events: none; }
+  .ttl { font-size: 13px; font-weight: 650; color: var(--soft); }
+  .ttl b { color: var(--ink); }
+  .where { margin-top: 8px; font: 800 44px/0.9 Archivo; font-stretch: 62%; letter-spacing: -0.02em; }
+  .where span { transition: color .6s; }
+  .story { margin-top: 8px; font-size: 16px; color: var(--soft); min-height: 44px; max-width: 26em; }
+  .story b { color: var(--ink); }
+  .bottom { position: fixed; left: 0; right: 0; bottom: 0; z-index: 2; padding: 34px 20px calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(to top, #0e0b26 55%, rgba(14,11,38,0)); }
+  .layers { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .layers::-webkit-scrollbar { display: none; }
+  .chip { flex: none; height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13.5px; font-weight: 650; color: var(--soft); background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); display: inline-flex; align-items: center; gap: 7px; }
+  .chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); }
+  .chip.on { color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(246,240,228,.5); }
+  .chip.on i { background: var(--ink); }
+  .row { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+  .play { width: 60px; height: 60px; border-radius: 50%; background: var(--ink); color: #17132f; display: grid; place-items: center; flex: none; box-shadow: 0 8px 26px rgba(0,0,0,.45); }
+  .play svg { width: 22px; height: 22px; }
+  .prog { flex: 1; }
+  .prog .l { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 650; color: var(--soft); }
+  .bar { position: relative; height: 4px; border-radius: 2px; background: var(--hair); margin-top: 8px; overflow: hidden; cursor: pointer; }
+  .bar i { position: absolute; inset: 0 auto 0 0; background: var(--ink); border-radius: 2px; }
+  .legend { display: flex; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--soft); flex-wrap: wrap; }
+  .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<header class="top">
+  <div class="ttl"><b>Prelude in C</b> · Bach · a journey across the harmony map</div>
+  <div class="where" id="where"></div>
+  <p class="story" id="story"></p>
+</header>
+<section class="bottom">
+  <div class="layers" id="layers">
+    <button class="chip on" data-l="lands"><i></i>Lands (keys)</button>
+    <button class="chip on" data-l="notes"><i></i>Notes</button>
+    <button class="chip" data-l="roads"><i></i>The three squares</button>
+    <button class="chip on" data-l="trail"><i></i>Trail</button>
+  </div>
+  <div class="row"><button class="play" id="pp" aria-label="Play"></button><div class="prog"><div class="l"><span id="bl">bar 1</span><span>35</span></div><div class="bar" id="bar"><i id="bf"></i></div></div></div>
+</section>
+<script type="module" src="world.js?v=1"></script>
+</body>
+</html>
