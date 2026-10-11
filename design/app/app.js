@@ -10,7 +10,7 @@ const MODULES = {
 };
 
 import { hc } from "./ui.js";
-const THEME = new URLSearchParams(location.search).get("theme");
+const THEME = new URLSearchParams(location.search).get("theme") || "adaptive";
 if (THEME) document.body.dataset.theme = THEME;
 // adaptive: the screen takes the harmonic color of what it shows (like Apple Music's now-playing)
 const ROUTE_H = { today: 0.62, piece: 0.62, player: 0.62, style: 0.74, shape: 1, explore: 0.4, river: 0.4, wall: 0.5, trail: 0.74, search: 0.5, learn: 0.3, lesson: 0.3, lab: 1, compare: 0.8, you: 0.5, welcome: 0.62, share: 1 };

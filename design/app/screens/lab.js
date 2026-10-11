@@ -18,8 +18,8 @@ export function lab() {
       .sq-pick button i { width: 10px; height: 10px; border-radius: 2px; background: var(--f); transform: rotate(45deg); }
       .sq-pick button.on { box-shadow: inset 0 0 0 2px var(--ink); }
       .sq-clock { width: 100%; height: auto; margin-top: 8px; touch-action: manipulation; }
-      .sq-clock .lbl { font: 700 15px Archivo, "Noto Music"; fill: #23201c; }
-      .sq-clock .lbl.off { fill: #a39a8d; font-weight: 500; }
+      .sq-clock { color: var(--ink); } .sq-clock .lbl { font: 700 15px Archivo, "Noto Music"; fill: currentColor; }
+      .sq-clock .lbl.off { fill-opacity: .45; font-weight: 500; }
       .sq-clock .hit { cursor: pointer; }
       .sq-mode { display: flex; gap: 8px; } .sq-mode button { flex: 1; height: 40px; border-radius: 999px; font-weight: 650; font-size: 14px; box-shadow: inset 0 0 0 1.5px var(--hair); }
       .sq-mode button.on { background: var(--ink); color: var(--paper); box-shadow: none; }
@@ -40,7 +40,7 @@ export function lab() {
       const childWords = () => (mode === "down" ? "dominant seventh" : "minor sixth");
       function draw() {
         const q = SQUARES[sq], col = hc(q.h);
-        let s = `<circle r="${R}" fill="none" stroke="#ddd4c6" stroke-width="2"/>`;
+        let s = `<circle r="${R}" fill="none" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>`;
         SQUARES.forEach((o, i) => { if (i !== sq) s += `<polygon points="${o.pcs.map((p) => P(p).join(",")).join(" ")}" fill="none" stroke="${hc(o.h).field}" stroke-width="1.5" stroke-dasharray="4 5" opacity=".55"/>`; });
         const pcs = q.pcs.map((p) => (p === moved ? (mode === "down" ? (p + 11) % 12 : (p + 1) % 12) : p));
         const order = [...pcs].sort((a, b) => a - b);
@@ -48,7 +48,7 @@ export function lab() {
         for (let pc = 0; pc < 12; pc++) {
           const on = pcs.includes(pc), [x, y] = P(pc), [lx, ly] = P(pc, R + 30);
           s += `<text x="${lx}" y="${ly + 5}" text-anchor="middle" class="lbl${on ? "" : " off"}">${PC[pc]}</text>`;
-          s += on ? `<circle cx="${x}" cy="${y}" r="${pc === (moved == null ? -1 : pcs[q.pcs.indexOf(moved)]) ? 13 : 10}" fill="#fbf8f2" stroke="${col.deep}" stroke-width="3"/>` : `<circle cx="${x}" cy="${y}" r="3" fill="#c9bfae"/>`;
+          s += on ? `<circle cx="${x}" cy="${y}" r="${pc === (moved == null ? -1 : pcs[q.pcs.indexOf(moved)]) ? 13 : 10}" fill="#fbf8f2" stroke="${col.deep}" stroke-width="3"/>` : `<circle cx="${x}" cy="${y}" r="3" fill="currentColor" fill-opacity=".35"/>`;
         }
         q.pcs.forEach((p) => { const [x, y] = P(p); s += `<circle class="hit" data-p="${p}" cx="${x}" cy="${y}" r="26" fill="transparent"/>`; });
         svg.innerHTML = s;

@@ -35,11 +35,11 @@ export function explore() {
     html,
     mount(root) {
       const svg = root.querySelector("#world");
-      let out = WORLD_DOTS.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.25" fill="#23201c" fill-opacity=".2"/>`).join("");
+      let out = WORLD_DOTS.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.25" fill="currentColor" fill-opacity=".28"/>`).join("");
       for (const [name, , , , h] of PLACES_1950s) {
         const [x, y] = PINS[name], sel = name === "Rio de Janeiro";
-        out += `${sel ? `<circle cx="${x}" cy="${y}" r="11" fill="none" stroke="#23201c" stroke-width="1.5"/>` : ""}<circle cx="${x}" cy="${y}" r="${sel ? 6.5 : 4.5}" fill="${hc(h).field}" stroke="#fbf8f2" stroke-width="1.5"/>`;
-        if (sel) out += `<text x="${x + 15}" y="${y + 4}" font-family="Archivo" font-size="11" font-weight="700" fill="#23201c">Rio, 1958</text>`;
+        out += `${sel ? `<circle cx="${x}" cy="${y}" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/>` : ""}<circle cx="${x}" cy="${y}" r="${sel ? 6.5 : 4.5}" fill="${hc(h).field}" stroke="currentColor" stroke-opacity=".9" stroke-width="1.5"/>`;
+        if (sel) out += `<text x="${x + 15}" y="${y + 4}" font-family="Archivo" font-size="11" font-weight="700" fill="currentColor">Rio, 1958</text>`;
       }
       svg.innerHTML = out;
     },
@@ -67,10 +67,10 @@ export function river() {
     const on = lineage.has(n), col = hc(h).field, op = on ? 1 : 0.28;
     lines += `<line x1="${x}" y1="${y(start)}" x2="${x}" y2="${y(END)}" stroke="${col}" stroke-width="${on ? 7 : 5}" stroke-linecap="round" opacity="${op}"/>`;
     for (const p of parents) { const px = byName[p][2]; const linkOn = on && lineage.has(p); links += `<path d="M${px} ${y(start) - 26} C${px} ${y(start) - 6} ${x} ${y(start) - 20} ${x} ${y(start)}" fill="none" stroke="${col}" stroke-width="${linkOn ? 3 : 2}" opacity="${linkOn ? 1 : 0.25}"/>`; }
-    labels += `<text x="${x + (x > 330 ? -8 : 8)}" y="${y(start) + 4}" text-anchor="${x > 330 ? "end" : "start"}" font-family="Archivo" font-size="${on ? 13 : 11.5}" font-weight="${on ? 750 : 600}" fill="#23201c" opacity="${on ? 1 : 0.5}">${n} <tspan fill="#6f685e" font-weight="500">${start}</tspan></text>`;
+    labels += `<text x="${x + (x > 330 ? -8 : 8)}" y="${y(start) + 4}" text-anchor="${x > 330 ? "end" : "start"}" font-family="Archivo" font-size="${on ? 13 : 11.5}" font-weight="${on ? 750 : 600}" fill="currentColor" opacity="${on ? 1 : 0.5}">${n} <tspan fill-opacity=".6" font-weight="500">${start}</tspan></text>`;
   }
   let years = "";
-  for (let yr = 1900; yr <= 2020; yr += 20) years += `<text x="400" y="${y(yr) + 4}" text-anchor="end" font-family="Archivo" font-size="11" fill="#a39a8d">${yr}</text><line x1="0" x2="372" y1="${y(yr)}" y2="${y(yr)}" stroke="#ddd4c6" stroke-dasharray="2 6"/>`;
+  for (let yr = 1900; yr <= 2020; yr += 20) years += `<text x="400" y="${y(yr) + 4}" text-anchor="end" font-family="Archivo" font-size="11" fill="currentColor" fill-opacity=".45">${yr}</text><line x1="0" x2="372" y1="${y(yr)}" y2="${y(yr)}" stroke="currentColor" stroke-opacity=".15" stroke-dasharray="2 6"/>`;
   return shell("explore", `
     ${roomHead("Explore")}
     ${lenses("river")}

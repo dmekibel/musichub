@@ -46,25 +46,25 @@ const INK = { T: "#2e1d07", S: "#f7f1e6", D: "#f7f1e6" };
 export function atlasSVG({ now = "vii°/ii", prev = "V", next = "ii", counts = BACH.counts, labels = true } = {}) {
   const r = (a) => 12 + 3.4 * Math.sqrt(counts[a] || 0);
   let s = `<svg viewBox="0 0 400 400" class="atlas" role="img" aria-label="Harmony Atlas">
-  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#23201c"/></marker>
-  <marker id="ahs" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a39a8d"/></marker></defs>
-  <path d="M0 0H200V${M[1]}L0 400Z" fill="${hc(0.4).tint}"/><path d="M200 0H400V400L200 ${M[1]}Z" fill="${hc(1).tint}"/><path d="M0 400L200 ${M[1]}L400 400Z" fill="${hc(0).tint}"/>
-  <path d="M200 0V${M[1]}M200 ${M[1]}L0 400M200 ${M[1]}L400 400" stroke="#ddd4c6" stroke-width="1.5" fill="none"/>
-  <circle cx="96" cy="150" r="58" fill="none" stroke="#c9d6cc" stroke-width="1.5"/><circle cx="304" cy="150" r="58" fill="none" stroke="#c6c7e3" stroke-width="1.5"/><circle cx="200" cy="318" r="58" fill="none" stroke="#e6d3ac" stroke-width="1.5"/>`;
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+  <marker id="ahs" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor" fill-opacity=".5"/></marker></defs>
+  <path d="M0 0H200V${M[1]}L0 400Z" fill="${hc(0.4).field}" fill-opacity=".16"/><path d="M200 0H400V400L200 ${M[1]}Z" fill="${hc(1).field}" fill-opacity=".2"/><path d="M0 400L200 ${M[1]}L400 400Z" fill="${hc(0).field}" fill-opacity=".18"/>
+  <path d="M200 0V${M[1]}M200 ${M[1]}L0 400M200 ${M[1]}L400 400" stroke="currentColor" stroke-opacity=".18" stroke-width="1.5" fill="none"/>
+  <g fill="none" stroke="currentColor" stroke-opacity=".2" stroke-width="1.5"><circle cx="96" cy="150" r="58"/><circle cx="304" cy="150" r="58"/><circle cx="200" cy="318" r="58"/></g>`;
   if (labels) s += `<text x="16" y="34" class="ra">Away</text><text x="16" y="50" class="rb">subdominant</text>
   <text x="384" y="34" class="ra" text-anchor="end">Tension</text><text x="384" y="50" class="rb" text-anchor="end">dominant</text>
   <text x="200" y="396" class="ra" text-anchor="middle">Home</text>`;
   // satellite leader lines
-  for (const [k, n] of Object.entries(NODES)) if (n.sat && counts[k]) { const t = NODES[n.sat].at; s += `<line x1="${n.at[0]}" y1="${n.at[1]}" x2="${t[0] + (n.at[0] - t[0]) * 0.32}" y2="${t[1] + (n.at[1] - t[1]) * 0.32}" stroke="#a39a8d" stroke-width="1.2" marker-end="url(#ahs)"/>`; }
+  for (const [k, n] of Object.entries(NODES)) if (n.sat && counts[k]) { const t = NODES[n.sat].at; s += `<line x1="${n.at[0]}" y1="${n.at[1]}" x2="${t[0] + (n.at[0] - t[0]) * 0.32}" y2="${t[1] + (n.at[1] - t[1]) * 0.32}" stroke="currentColor" stroke-opacity=".45" stroke-width="1.2" marker-end="url(#ahs)"/>`; }
   // route: previous -> now -> next
   const cur = (a, b, bend) => { const [x1, y1] = NODES[a].at, [x2, y2] = NODES[b].at; const mx = (x1 + x2) / 2 + (y2 - y1) * bend, my = (y1 + y2) / 2 - (x2 - x1) * bend; const ex = x2 + (mx - x2) * 0.18, ey = y2 + (my - y2) * 0.18; return `M${x1} ${y1} Q${mx} ${my} ${ex} ${ey}`; };
-  if (prev) s += `<path d="${cur(prev, now, 0.22)}" fill="none" stroke="#23201c" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round" marker-end="url(#ah)"/>`;
-  if (next) s += `<path d="${cur(now, next, -0.25)}" fill="none" stroke="#23201c" stroke-opacity=".35" stroke-width="1.6" marker-end="url(#ahs)"/>`;
+  if (prev) s += `<path d="${cur(prev, now, 0.22)}" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round" marker-end="url(#ah)"/>`;
+  if (next) s += `<path d="${cur(now, next, -0.25)}" fill="none" stroke="currentColor" stroke-opacity=".4" stroke-width="1.6" marker-end="url(#ahs)"/>`;
   for (const [k, n] of Object.entries(NODES)) {
     const used = counts[k], [x, y] = n.at, rr = used ? r(k) : 14;
-    if (k === now) s += `<circle cx="${x}" cy="${y}" r="${rr + 7}" fill="none" stroke="#23201c" stroke-width="2"/>`;
-    s += used ? `<circle cx="${x}" cy="${y}" r="${rr}" fill="${FILL[n.fn]}" ${n.sat ? `stroke="#f4efe6" stroke-width="2"` : ""}/>` : `<circle cx="${x}" cy="${y}" r="${rr}" fill="none" stroke="#c9bfae" stroke-width="1.3" stroke-dasharray="3 3"/>`;
-    s += `<text x="${x}" y="${y + 4.5}" text-anchor="middle" class="${n.sat ? "nl s" : "nl"}" fill="${used ? INK[n.fn] : "#a39a8d"}">${k}</text>`;
+    if (k === now) s += `<circle cx="${x}" cy="${y}" r="${rr + 7}" fill="none" stroke="currentColor" stroke-width="2"/>`;
+    s += used ? `<circle cx="${x}" cy="${y}" r="${rr}" fill="${FILL[n.fn]}" ${n.sat ? `stroke="currentColor" stroke-opacity=".9" stroke-width="2"` : ""}/>` : `<circle cx="${x}" cy="${y}" r="${rr}" fill="none" stroke="currentColor" stroke-opacity=".4" stroke-width="1.3" stroke-dasharray="3 3"/>`;
+    s += `<text x="${x}" y="${y + 4.5}" text-anchor="middle" class="${n.sat ? "nl s" : "nl"}" ${used ? `fill="${INK[n.fn]}"` : `fill="currentColor" fill-opacity=".5"`}>${k}</text>`;
   }
   return s + `</svg>`;
 }
@@ -90,9 +90,9 @@ export function player() {
     <div class="transport"><a class="tr">${ICON.prev}</a><a class="tr big">${ICON.play}</a><a class="tr">${ICON.next}</a></div>
   </main>
   <style>
-    .atlas { width: 100%; height: auto; border-radius: 10px; }
-    .atlas .ra { font: 800 26px Archivo; font-stretch: 62%; fill: #23201c; }
-    .atlas .rb { font: 600 11.5px Archivo; fill: #6f685e; }
+    .atlas { width: 100%; height: auto; border-radius: 10px; color: var(--ink); }
+    .atlas .ra { font: 800 26px Archivo; font-stretch: 62%; fill: currentColor; }
+    .atlas .rb { font: 600 11.5px Archivo; fill: currentColor; fill-opacity: .6; }
     .atlas .nl { font: 700 14px Archivo; } .atlas .nl.s { font-size: 11px; }
     .now { margin-top: 16px; }
     .now-chord { font-size: 84px; display: flex; align-items: flex-start; }
