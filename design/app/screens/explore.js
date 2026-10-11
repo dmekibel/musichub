@@ -1,7 +1,7 @@
 // Explore: the world Atlas, the River of history, the Wall, a Trail, and Search.
-import { sleeve, shell, page, roomHead, topBar, ICON, hc } from "../ui.js";
-import { BACH, BOSSA, PLACES_1950s } from "../data.js";
-import { WORLD_DOTS, PINS } from "../world.js";
+import { sleeve, shell, page, roomHead, topBar, ICON, hc } from "../ui.js?v=20261011e";
+import { BACH, BOSSA, PLACES_1950s } from "../data.js?v=20261011e";
+import { WORLD_DOTS, PINS } from "../world.js?v=20261011e";
 
 const lenses = (on) => `<nav class="lenses">${[["explore", "Atlas"], ["river", "River"], ["wall", "Wall"], ["trail", "Trails"], ["search", "Search"]].map(([id, l]) => `<a href="#${id}" class="${id === on ? "on" : ""}">${l}</a>`).join("")}</nav>`;
 const illus = `<p class="illus">Illustrative content and values for this mockup.</p>`;

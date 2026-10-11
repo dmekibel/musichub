@@ -1,6 +1,6 @@
 // Compare, You, First run, Share card.
-import { sleeve, shell, page, topBar, roomHead, ICON, hc, dialsRow, dialSVG, DIAL_NAMES, acc } from "../ui.js";
-import { BACH } from "../data.js";
+import { sleeve, shell, page, topBar, roomHead, ICON, hc, dialsRow, dialSVG, DIAL_NAMES, acc } from "../ui.js?v=20261011e";
+import { BACH } from "../data.js?v=20261011e";
 
 const GIANT = { h: 0.96, dials: { key: 0.31, squares: 0.12, triangles: 0.62, hexagons: 0.1, cluster: 0.14 }, tension: 0.7 };
 

@@ -1,3 +1,4 @@
+import { plain, trail } from "./prefs.js?v=20261011e";
 // MusicHub design system: harmonic color, the sleeve, small drawing helpers.
 // Rule: color always means harmony. 0 = home-heavy and plain (saffron), 1 = tension-heavy and
 // chromatic (indigo), through green. Nothing else in the app gets a hue.
@@ -122,8 +123,15 @@ export const page = (body) => `<main class="screen full">${body}</main>`;
 export function roomHead(title) {
   return `<header class="roomhead"><h1 class="disp">${title}</h1><a class="me" href="#you" aria-label="You">D</a></header>`;
 }
-export function topBar(title = "", right = ICON.share) {
-  return `<div class="topbar"><a class="ic" href="javascript:history.back()" aria-label="Back">${ICON.back}</a><span class="ttl">${title}</span><span class="ic">${right}</span></div>`;
+export function topBar(title = "", right = ICON.share, { aa = false } = {}) {
+  const words = aa ? `<button class="ic aa${plain() ? "" : " on"}" data-act="words" aria-label="Switch between plain words and theory terms">Aa</button>` : "";
+  return `<div class="topbar"><a class="ic" href="javascript:history.back()" aria-label="Back">${ICON.back}</a><span class="ttl">${title}</span><span class="tb-r">${words}<span class="ic">${right}</span></span></div>${trailBar()}`;
+}
+/** The trail: the way back through the pages you came by. Each step taps back; the last one is where you are. */
+export function trailBar() {
+  if (trail.length < 2) return "";
+  const lab = (t) => (typeof t.label === "function" ? t.label() : t.label);
+  return `<nav class="trail" aria-label="Your trail">${trail.map((t, i) => (i === trail.length - 1 ? `<b>${lab(t)}</b>` : `<a href="${t.hash}">${lab(t)}</a><span class="sep">›</span>`)).join("")}</nav>`;
 }
 
 // ---------- the Five Dials glyph: five symmetric shapes, each sized by strength

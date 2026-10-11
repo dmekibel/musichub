@@ -1,7 +1,7 @@
 // One shared player for the beta: Bach's Prelude in C, plus chords and rhythms on demand.
 // Reuses the working synth and scheduler from the v0 prototype (../../js/audio.js).
-import { Player } from "../../js/audio.js";
-import { BWV846_NOTES } from "../../data/bwv846-notes.js";
+import { Player } from "../../js/audio.js?v=20261011e";
+import { BWV846_NOTES } from "../../data/bwv846-notes.js?v=20261011e";
 
 const END = Math.max(...BWV846_NOTES.notes.map((n) => n[0] + n[1]));
 export const NBARS = 35;
@@ -33,6 +33,12 @@ function unlockIOS() {
 export async function toggle() { unlockIOS(); if (player.playing) player.pause(); else await player.play(); emit(); }
 export async function play() { unlockIOS(); if (!player.playing) await player.play(); emit(); }
 export function seekBar(i) { player.seek(Math.max(0, Math.min(NBARS - 1, i)) * 16); emit(); }
+// study tools: tempo and a bar loop
+export const TEMPOS = [66, 52, 40, 80];
+export const tempo = () => player.tempo;
+export function nextTempo() { const i = TEMPOS.indexOf(player.tempo); player.setTempo(TEMPOS[(i + 1) % TEMPOS.length]); emit(); }
+export let loop = null; // { from, to } bar indexes, inclusive
+export function setLoop(l) { loop = l; emit(); }
 export function seekFrac(f) { player.seek(Math.max(0, Math.min(1, f)) * END); emit(); }
 
 async function ready() { unlockIOS(); player.ensureCtx(); if (player.ctx.state === "suspended") await player.ctx.resume(); return player.ctx.currentTime + 0.03; }
@@ -49,8 +55,9 @@ export async function rhythm(on, n, { loops = 2, step = 0.13, midi = 81 } = {}) 
 }
 
 let last = -1, lastPlaying = false;
-(function loop() {
-  requestAnimationFrame(loop);
+(function frame() {
+  requestAnimationFrame(frame);
+  if (loop && player.playing && (player.pos() >= (loop.to + 1) * 16 || player.pos() < loop.from * 16 - 0.5)) player.seek(loop.from * 16);
   const b = bar(), p = player.playing;
   if (b !== last || p !== lastPlaying) { last = b; lastPlaying = p; emit(); }
   if (p) tickers.forEach((f) => f());

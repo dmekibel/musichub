@@ -1,8 +1,8 @@
 // The one page template, shown for three nouns: a piece, a style and a shape.
 // 1 sleeve · 2 one line + listen · 3 fingerprint with lenses · 4 because… · 5 compared to · 6 read · 7 learn it / try it
-import { sleeve, page, topBar, ICON, dialsRow, hc, SHAPES } from "../ui.js";
-import { BACH, BOSSA, SQUARES } from "../data.js";
-import { atlasSVG } from "./listen.js";
+import { sleeve, page, topBar, ICON, dialsRow, hc, SHAPES } from "../ui.js?v=20261011e";
+import { BACH, BOSSA, SQUARES } from "../data.js?v=20261011e";
+import { atlasSVG } from "./listen.js?v=20261011e";
 
 const css = `<style>
   .lead { margin-top: 16px; }
@@ -33,7 +33,8 @@ const css = `<style>
 const rowLink = (href, sl, title, sub, why = "") => `<a class="row" href="${href}">${sl}<span class="txt"><b>${title}</b><span>${sub}</span></span>${why ? `<span class="why">${why}</span>` : ""}</a>`;
 
 // ---------- piece
-export function piece() {
+export function piece() { return { html: pieceHTML(), crumb: "Prelude in C" }; }
+function pieceHTML() {
   const palette = BACH.palette.map((p) => `<div class="chipx fn-${p.fn}" style="flex:${p.n}"><b>${p.name}</b>${p.n}</div>`).join("");
   return page(`${css}
     ${topBar("", ICON.share)}
@@ -45,7 +46,7 @@ export function piece() {
     <nav class="lenses"><a class="on">Harmony</a><a>Shape</a><a>Rhythm</a><a>Form</a><a>Story</a></nav>
     <section class="sec" style="margin-top:18px">
       <div class="sec-h"><h2 class="disp">Its footprint</h2><a href="#player">Open the Atlas</a></div>
-      ${atlasSVG({ now: null, prev: null, next: null })}
+      ${atlasSVG({ links: true })}
       <div class="facts">
         <div class="fact"><b>${BACH.fnCount.D} of 35</b><span>bars in tension</span></div>
         <div class="fact"><b>3 of 3</b><span>diminished squares used</span></div>

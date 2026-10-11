@@ -1,7 +1,7 @@
 // Learn: the Path, a lesson step, and the Ear gym.
 // Rule for tests: color means harmony, so nothing that's being tested wears its color until the answer.
-import { sleeve, shell, page, roomHead, ICON, hc } from "../ui.js";
-import { BACH } from "../data.js";
+import { sleeve, shell, page, roomHead, ICON, hc } from "../ui.js?v=20261011e";
+import { BACH } from "../data.js?v=20261011e";
 
 const lenses = (on) => `<nav class="lenses">${[["learn", "Path"], ["gym", "Ear gym"], ["learn", "Masters"]].map(([id, l], i) => `<a href="#${id}" class="${(on === "path" && i === 0) || (on === "gym" && i === 1) ? "on" : ""}">${l}</a>`).join("")}</nav>`;
 
@@ -66,7 +66,7 @@ export function lesson() {
   return {
     html,
     async mount(root) {
-      const S = await import("../sound.js");
+      const S = await import("../sound.js?v=20261011e");
       const V = { A: BACH.bars[10], B: BACH.bars[11] };
       let pick = null, done = false;
       root.querySelectorAll(".play").forEach((b) => b.addEventListener("click", (e) => { e.stopPropagation(); S.chord(V[b.dataset.k].voicing, 2); }));

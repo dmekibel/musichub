@@ -1,6 +1,6 @@
 // Lab: the three diminished squares, as a toy. Tap a corner to move that note by a half step.
-import { shell, roomHead, hc } from "../ui.js";
-import { SQUARES, PC } from "../data.js";
+import { shell, roomHead, hc } from "../ui.js?v=20261011e";
+import { SQUARES, PC } from "../data.js?v=20261011e";
 
 export function lab() {
   const html = shell("lab", `
@@ -33,7 +33,7 @@ export function lab() {
   return {
     html,
     async mount(root) {
-      const S = await import("../sound.js");
+      const S = await import("../sound.js?v=20261011e");
       const hear = (pcs) => S.chord(pcs.map((p) => 60 + p));
       const svg = root.querySelector("#clock"), read = root.querySelector("#read"), kidsEl = root.querySelector("#kids");
       let sq = 1, mode = "down", moved = null;
