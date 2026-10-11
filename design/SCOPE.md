@@ -6,6 +6,27 @@ step by step, and play with the deepest systems (mDecks-level harmony maps, Barr
 Wikipedia + Spotify + Duolingo + mDecks + Radio Garden, curated, with one design language.
 
 Research behind the views: `RESEARCH-VISUALIZATION.md` (mDecks in depth, 26 systems, ten ranked views).
+The layer under everything (the Five Dials, the measures, how views relate, research with the archive): `SYSTEM.md`, shown visually in `relations.html`.
+
+## Markup (draft 3, Claude for David, who said "you do it")
+**Added (it was missing):**
+- **Meaning lens:** what a song is about, references, and line-by-line translation for world music. Lyrics are copyrighted, so the full text only comes through a licensed provider (e.g. Musixmatch); our own notes and context are free to write. Tier 2.
+- **Mood lens:** where a piece sits between calm and energetic, and between dark and bright, measured and labeled as an estimate. Tier 2.
+- **Influence web:** artists as a constellation of who learned from whom, every line with its reason. Tier 2.
+- **Reading music:** a Learn track for notation, so the Score lens isn't a wall for beginners. Tier 2.
+- **Content engine (internal, tier 1):** none of the archive exists without it. It covers ingestion from MusicBrainz and Wikidata, an analysis studio for hand-labeling harmony, and check scripts like `tools/check.js` for every piece.
+
+**Changed:**
+- **One color meaning, everywhere:** color always means harmony (home saffron → away green → tension indigo, and an aggregate "harmonic color" for anything bigger). Rooms get no color of their own, so the tab bar is ink only. This is the canon's "never two hue meanings".
+- **Version 1 is too big to build at once.** The first slice:
+  - Today;
+  - the Player with the Harmony Atlas and the Analysis Ribbon;
+  - three page types (piece, style, idea);
+  - Explore's Atlas with a little seed content;
+  - Lab's Diminished squares;
+  - the first lessons of the Path.
+
+**Cut:** nothing. The tiers already hold the long tail.
 
 How this list was made: David's own invention habits (DAVID-MODEL §3) run across all of music, then
 curated (P22: the best features, not the most). Tiers: **1** = version 1 can't be the product without it,
@@ -24,6 +45,7 @@ curated (P22: the best features, not the most). Tiers: **1** = version 1 can't b
 | Idea: chord, interval, progression, cadence | diminished seventh, tritone, ii–V–I, the Andalusian cadence, "four chords" | 1 |
 | Idea: scale, mode, maqam, raga, tuning | dorian, blues scale, maqam Hijaz, raga Yaman, gamelan pelog, just intonation | 1 |
 | Idea: rhythm, meter, tala, groove | son clave, tresillo, the Amen break, 7/8, teental, swing | 2 |
+| **Shape** (one shape, every place it appears as a scale, chord or rhythm) | "7 in 12, most even" = the major scale = the bembé bell; the diminished square | 1 |
 | Idea: form | 12-bar blues, AABA, sonata form, rondo, verse–chorus, drop | 2 |
 | Idea: technique | Alberti bass, call and response, blue notes, walking bass, Barry Harris's 6th-diminished scale | 2 |
 | System (a master's way of thinking) | Barry Harris, Bach chorales, Coltrane changes, Lendvai's axes, Schenker | 2 |
@@ -52,6 +74,8 @@ curated (P22: the best features, not the most). Tiers: **1** = version 1 can't b
 | Story cards per section (what's happening, in plain words) | 1 |
 | Tension curve and the whole-piece strip, linked to everything | 1 |
 | Tap any chord, note or name and its page opens in one tap | 1 |
+| **Five Dials** (key, squares, triangles, hexagons, cluster) on every moment and every page; a **key compass** in the Player | 1 |
+| **Harmonic palette** with its readings (time spent, skeleton, spice, hidden harmonies) on every piece and artist | 1 |
 | **Rhythm lens:** groove, necklace, swing ratio, density | 2 |
 | **Melody lens:** contour, intervals, motifs and where they return | 2 |
 | **Form lens:** sections, repetition arcs, self-similarity map | 2 |
@@ -77,7 +101,7 @@ curated (P22: the best features, not the most). Tiers: **1** = version 1 can't b
 | **Because… rabbit holes:** from any piece, the same move, same clave, teacher and student, sampled by | 2 |
 | Artist journeys on the map (where they lived, toured, recorded) | 2 |
 | How a style spread (bossa nova from Rio to New York to Tokyo, animated) | 2 |
-| **Findings:** measured statistics as plain sentences ("minor keys in the US top 40, 1960–2020") | 2 |
+| **Findings:** our own research on the archive (the shape of a century, the most square composer, shape twins, story shapes, how shocking it was then), each with its chart, n and method | 2 |
 | This day in music; a sound from somewhere you haven't been | 1 |
 | Instruments of the world (hear each one; where it lives) | 2 |
 | Charts through time analyzed (the harmony of every decade's hits) | 3 |
@@ -109,7 +133,9 @@ curated (P22: the best features, not the most). Tiers: **1** = version 1 can't b
 | **Voice-leading playground:** move one note, watch the chord change (Tymoczko) | 2 |
 | **Reharmonizer:** give a melody, explore substitutions on the map | 2 |
 | **Spiral array** in 3D for key journeys (Chew): the showpiece where 3D earns its place | 3 |
-| Export to MIDI and to a score | 3 |
+| **Capture:** save any progression, voicing or groove to your collection; export MIDI (the paying feature for producers and songwriters) | 2 |
+| **Phase torus:** pieces as paths on a donut of key × triad direction (Yust) | 3 |
+| Export to a score | 3 |
 
 ## F. Play: daily games
 

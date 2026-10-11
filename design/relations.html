@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MusicHub · how everything relates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Noto+Music&display=swap" rel="stylesheet">
+<style>
+  :root { --paper: #f4efe6; --card: #fbf8f2; --ink: #22201c; --soft: #6f685e; --faint: #a39a8d; --hair: #ddd4c6;
+          --home: #f2b135; --away: #00a388; --tension: #3a2bdb; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--paper); color: var(--ink); font: 400 16px/1.5 Archivo, "Noto Music", system-ui, sans-serif; -webkit-font-smoothing: antialiased; padding: calc(30px + env(safe-area-inset-top)) 20px 80px; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font: 800 clamp(52px, 11vw, 110px)/0.86 Archivo; font-stretch: 62%; letter-spacing: -2px; }
+  .lede { max-width: 700px; margin-top: 14px; font-size: 18px; }
+  h2 { font: 800 46px/0.9 Archivo; font-stretch: 62%; letter-spacing: -.5px; margin: 60px 0 8px; }
+  .sub { color: var(--soft); max-width: 700px; }
+  .card { background: var(--card); border-radius: 14px; box-shadow: inset 0 0 0 1px var(--hair); padding: 18px; margin-top: 18px; }
+  .finding { font: 700 19px/1.3 Archivo, "Noto Music"; margin-top: 14px; max-width: 760px; }
+  .finding span { font-weight: 400; color: var(--soft); }
+
+  /* dials */
+  .dials { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+  .dial { background: var(--card); border-radius: 12px; box-shadow: inset 0 0 0 1px var(--hair); padding: 14px; }
+  .dial svg { width: 56px; height: 56px; }
+  .dial b { display: block; font-size: 17px; margin-top: 6px; }
+  .dial .who { font-size: 13px; color: var(--soft); }
+  .meter { height: 6px; border-radius: 3px; background: var(--hair); margin-top: 10px; position: relative; overflow: hidden; }
+  .meter i { position: absolute; inset: 0 auto 0 0; background: var(--ink); border-radius: 3px; }
+  .dial .val { font-size: 13px; color: var(--soft); margin-top: 6px; }
+  .heat { width: 100%; overflow-x: auto; margin-top: 10px; }
+  .heat svg { display: block; min-width: 640px; width: 100%; height: auto; }
+
+  /* twins */
+  .twins { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 16px; }
+  .twin { background: var(--card); border-radius: 14px; box-shadow: inset 0 0 0 1px var(--hair); padding: 16px; text-align: center; }
+  .twin svg { width: 170px; height: 170px; }
+  .twin b { display: block; font-size: 18px; }
+  .twin span { font-size: 14px; color: var(--soft); }
+  .eq { display: grid; place-items: center; font: 800 64px/1 Archivo; font-stretch: 62%; color: var(--faint); }
+
+  /* ladder */
+  .ladder { width: 100%; overflow-x: auto; margin-top: 16px; }
+  table { border-collapse: collapse; min-width: 860px; width: 100%; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 10px; border-top: 1px solid var(--hair); }
+  thead th { font-weight: 700; border-top: 0; color: var(--soft); font-size: 13px; }
+  tbody th { font: 800 22px/1 Archivo; font-stretch: 70%; white-space: nowrap; }
+  .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 14px; }
+  .link { background: var(--card); border-radius: 12px; box-shadow: inset 0 0 0 1px var(--hair); padding: 12px 14px; font-size: 14px; }
+  .link b { display: block; font-size: 16px; }
+
+  /* palette */
+  .pal { margin-top: 14px; }
+  .pal h4 { font-size: 14px; color: var(--soft); font-weight: 600; margin: 14px 0 6px; }
+  .strip { display: flex; gap: 3px; height: 54px; }
+  .chip { border-radius: 6px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px 8px; font-size: 12.5px; line-height: 1.15; overflow: hidden; color: #f7f1e6; min-width: 0; }
+  .chip.T { background: var(--home); color: #2e1d07; } .chip.S { background: var(--away); } .chip.D { background: var(--tension); }
+  .chip b { font-size: 14px; white-space: nowrap; }
+
+  ol.research { margin-top: 14px; padding-left: 22px; columns: 2 320px; column-gap: 28px; }
+  ol.research li { margin-bottom: 10px; break-inside: avoid; }
+  ol.research b { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>How everything relates</h1>
+  <p class="lede">Music is shapes on a circle, moving through time. Pitch is a circle; rhythm is a circle. One geometry, measured the same way for every piece, rolled up to artists, styles, places and decades. Then we do research with it, the way ColorHub does with color.</p>
+
+  <h2>The Five Dials</h2>
+  <p class="sub">The Fourier transform of the notes measures how much music leans toward each symmetric shape on the 12-note clock. Each dial has a strength and a direction. One piece of math holds Bach's keys, Barry Harris's squares, Coltrane's triangles and Debussy's hexagons.</p>
+  <div class="dials" id="dials"></div>
+  <div class="card">
+    <b>Bach's Prelude in C, bar by bar</b> <span class="sub">(computed live from the score in this page)</span>
+    <div class="heat"><svg id="heat"></svg></div>
+    <p class="finding">Squares hits 1.00 exactly where Bach writes a diminished chord. <span>And a plain G7 already reads 0.86 square: Barry Harris's "a dominant is a diminished chord with one note moved", as a number. Over the whole piece the squares cancel to almost zero, because Bach uses all three.</span></p>
+  </div>
+
+  <h2>Shape twins</h2>
+  <p class="sub">Because scales and rhythms are both shapes on a circle, the same shape shows up as a scale in one culture and a rhythm in another.</p>
+  <div class="twins">
+    <div class="twin"><svg id="tw-major" viewBox="0 0 100 100"></svg><b>The major scale</b><span>7 notes out of 12</span></div>
+    <div class="twin"><svg id="tw-bembe" viewBox="0 0 100 100"></svg><b>The bembé bell pattern</b><span>West Africa: 7 strokes in 12 pulses</span></div>
+    <div class="twin"><svg id="tw-bossa" viewBox="0 0 100 100"></svg><b>The bossa nova clave</b><span>5 hits spread as evenly as possible over 16</span></div>
+  </div>
+  <p class="finding">The major scale and the bembé bell are the same shape. <span>Jeff Pressing showed it in 1983. In MusicHub, shapes get their own pages, so the scale, the bell and every piece that uses either are one tap apart.</span></p>
+
+  <h2>The ladder</h2>
+  <p class="sub">Every view sits at one scale and one dimension. Moving right is zooming out: the same math, rolled up.</p>
+  <div class="ladder"><table>
+    <thead><tr><th></th><th>Moment</th><th>Phrase</th><th>Piece</th><th>Artist</th><th>Style · place · time</th><th>History · world</th></tr></thead>
+    <tbody>
+      <tr><th>Harmony</th><td>chord clock</td><td>route on the Atlas</td><td>Atlas footprint · harmonic palette</td><td>signature moves</td><td>chord grammar: what follows what</td><td>harmonic color of the world map</td></tr>
+      <tr><th>Shape</th><td>the chord's polygon</td><td>key compass trace</td><td>Five Dials</td><td>an artist's dials</td><td>a style's dials · shape twins</td><td>the shape of a century</td></tr>
+      <tr><th>Rhythm</th><td>the bar's necklace</td><td>groove</td><td>rhythm print</td><td>a drummer's swing</td><td>the clave family</td><td>the world rhythm tree</td></tr>
+      <tr><th>Tension</th><td>tension braid</td><td>section</td><td>story shape · form arcs</td><td>favorite story shapes</td><td>a style's story shapes</td><td>how shocking it was then</td></tr>
+      <tr><th>Sound</th><td>instruments now</td><td>texture</td><td>sound print</td><td>timbre habits</td><td>a scene's instruments</td><td>instruments of the world</td></tr>
+      <tr><th>Meaning</th><td>a note on a moment</td><td>a verse</td><td>themes</td><td>themes across a career</td><td>themes of a scene</td><td>topics of an age</td></tr>
+    </tbody>
+  </table></div>
+  <div class="links">
+    <div class="link"><b>Zoom</b>the same measure at the next scale: a polygon → the piece's dials → the century's dials</div>
+    <div class="link"><b>Twin</b>the same shape in another dimension or culture: a scale ↔ a rhythm</div>
+    <div class="link"><b>Drill</b>every number opens what made it: Squares 0.86 → the bars and notes behind it</div>
+    <div class="link"><b>Focus</b>tap anything and everything sharing it lights up: notes, functions, bars, place, time, shape</div>
+  </div>
+
+  <h2>The harmonic palette</h2>
+  <p class="sub">ColorHub reads a painting many ways. MusicHub reads a piece's chords many ways. Here is Bach's Prelude in C, from our data.</p>
+  <div class="card pal" id="pal"></div>
+
+  <h2>Research with the archive</h2>
+  <p class="sub">Become the archive, measure everything the same way, then publish findings, each with its chart, n, method and the pieces behind every dot. Planned studies:</p>
+  <ol class="research">
+    <li><b>The shape of a century.</b> The Five Dials of every decade: when squares rose, when hexagons peaked.</li>
+    <li><b>The most square composer.</b> Barry Harris's world, ranked by measure.</li>
+    <li><b>Shape twins across cultures.</b> Every pitch shape that's also a rhythm somewhere.</li>
+    <li><b>Signature moves.</b> Each artist's most characteristic chord moves, weighted by how unusual they are.</li>
+    <li><b>Story shapes of music.</b> Every tension curve sorted into a few archetypes, like the emotional arcs of novels.</li>
+    <li><b>How shocking was it then.</b> Surprise measured against music of its own year.</li>
+    <li><b>Voice-leading economy.</b> Who moves the voices least. Bach's Prelude: 82% of moves are a step or less.</li>
+    <li><b>The harmonic color of the world.</b> The map colored by harmony, decade by decade.</li>
+    <li><b>Progression migration.</b> The ii–V–I and the Andalusian cadence travelling the map.</li>
+    <li><b>Gravity.</b> How far each style dares to wander from home.</li>
+    <li><b>Instrument keys.</b> Guitar music lives in E and A, horn music in B♭ and E♭.</li>
+    <li><b>Sad words in major keys.</b> Lyrics against harmony, once lyrics are licensed.</li>
+  </ol>
+</div>
+<script type="module">
+import { BWV846_NOTES } from "../data/bwv846-notes.js";
+import { BWV846 } from "../data/bwv846-analysis.js";
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p && p.appendChild(e); return e; };
+
+// ---- the Five Dials, computed from the notes (duration-weighted pitch classes)
+const nb = 35, bars = Array.from({ length: nb }, () => new Array(12).fill(0)), all = new Array(12).fill(0);
+for (const [on, len, m] of BWV846_NOTES.notes) { const b = Math.min(nb - 1, Math.floor(on / 16)); bars[b][m % 12] += len; all[m % 12] += len; }
+function dft(v, k) { const s = v.reduce((a, b) => a + b, 0); let re = 0, im = 0; v.forEach((x, p) => { re += x * Math.cos(2 * Math.PI * k * p / 12); im -= x * Math.sin(2 * Math.PI * k * p / 12); }); return { mag: Math.hypot(re, im) / s, ph: Math.atan2(im, re) }; }
+
+const DIALS = [
+  { k: 5, name: "Key", who: "the major scale's shape · Bach, pop, folk", shape: [0, 2, 4, 5, 7, 9, 11] },
+  { k: 4, name: "Squares", who: "diminished · Barry Harris, Lendvai", shape: [0, 3, 6, 9] },
+  { k: 3, name: "Triangles", who: "augmented · Coltrane, Liszt", shape: [0, 4, 8] },
+  { k: 6, name: "Hexagons", who: "whole-tone · Debussy", shape: [0, 2, 4, 6, 8, 10] },
+  { k: 1, name: "Cluster", who: "notes bunched · modern music", shape: [0, 1, 2] },
+];
+const P = (i, n, r, c = 50) => [c + r * Math.sin((i / n) * Math.PI * 2), c - r * Math.cos((i / n) * Math.PI * 2)];
+function shapeIcon(svg, shape) {
+  el("circle", { cx: 50, cy: 50, r: 38, fill: "none", stroke: "#ddd4c6", "stroke-width": 2 }, svg);
+  if (shape === "fifths") { const order = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5]; el("polygon", { points: [0, 1, 2, 3, 4, 5, 6].map((i) => P(order[i] , 12, 38).join(",")).join(" "), fill: "#22201c" }, svg); return; }
+  el("polygon", { points: shape.map((pc) => P(pc, 12, 38).join(",")).join(" "), fill: "#22201c" }, svg);
+}
+const dialsEl = document.getElementById("dials");
+for (const d of DIALS) {
+  const f = dft(all, d.k);
+  const div = document.createElement("div"); div.className = "dial";
+  div.innerHTML = `<svg viewBox="0 0 100 100"></svg><b>${d.name}</b><div class="who">${d.who}</div><div class="meter"><i style="width:${(f.mag * 100).toFixed(0)}%"></i></div><div class="val">Bach's Prelude, whole piece: ${f.mag.toFixed(2)}</div>`;
+  shapeIcon(div.querySelector("svg"), d.shape);
+  dialsEl.appendChild(div);
+}
+
+// ---- heat strip: rows = dials, columns = bars
+const heat = document.getElementById("heat");
+const rows = DIALS.slice(0, 4), cw = 22, ch = 30, left = 96, top = 26;
+heat.setAttribute("viewBox", `0 0 ${left + nb * cw + 8} ${top + rows.length * ch + 40}`);
+rows.forEach((d, r) => {
+  const t = el("text", { x: 0, y: top + r * ch + ch / 2 + 5, "font-size": 14, "font-weight": 700, fill: "#22201c", "font-family": "Archivo" }, heat); t.textContent = d.name;
+  for (let b = 0; b < nb; b++) {
+    const v = dft(bars[b], d.k).mag;
+    el("rect", { x: left + b * cw + 1, y: top + r * ch + 2, width: cw - 2, height: ch - 4, rx: 4, fill: "#22201c", "fill-opacity": (0.06 + 0.94 * v * v).toFixed(3) }, heat);
+  }
+});
+for (let b = 0; b < nb; b++) {
+  const fn = BWV846.bars[b].fn;
+  el("rect", { x: left + b * cw + 1, y: top + rows.length * ch + 4, width: cw - 2, height: 6, rx: 3, fill: fn === "T" ? "#f2b135" : fn === "S" ? "#00a388" : "#3a2bdb" }, heat);
+  if ([1, 5, 10, 15, 20, 25, 30, 35].includes(b + 1)) { const t = el("text", { x: left + b * cw + cw / 2, y: top + rows.length * ch + 28, "text-anchor": "middle", "font-size": 11, fill: "#6f685e", "font-family": "Archivo" }, heat); t.textContent = b + 1; }
+}
+[[12, "C♯°7"], [14, "B°7"], [22, "F♯°7"]].forEach(([b, n]) => { const t = el("text", { x: left + (b - 1) * cw + cw / 2, y: 16, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#3a2bdb", "font-family": "Archivo, Noto Music" }, heat); t.textContent = n; });
+
+// ---- shape twins
+function necklace(id, on, n, label) {
+  const s = document.getElementById(id);
+  el("circle", { cx: 50, cy: 50, r: 36, fill: "none", stroke: "#ddd4c6", "stroke-width": 1.5 }, s);
+  el("polygon", { points: on.map((k) => P(k, n, 36).join(",")).join(" "), fill: "#22201c", "fill-opacity": .9 }, s);
+  for (let k = 0; k < n; k++) { const [x, y] = P(k, n, 36); el("circle", { cx: x, cy: y, r: on.includes(k) ? 4.2 : 1.8, fill: on.includes(k) ? "#22201c" : "#a39a8d", stroke: "#fbf8f2", "stroke-width": on.includes(k) ? 1.5 : 0 }, s); }
+  if (label) label.forEach(([k, t]) => { const [x, y] = P(k, n, 46); const e = el("text", { x, y: y + 3.5, "text-anchor": "middle", "font-size": 7, fill: "#6f685e", "font-family": "Archivo" }, s); e.textContent = t; });
+}
+necklace("tw-major", [0, 2, 4, 5, 7, 9, 11], 12, [[0, "C"], [2, "D"], [4, "E"], [5, "F"], [7, "G"], [9, "A"], [11, "B"]]);
+necklace("tw-bembe", [0, 2, 4, 5, 7, 9, 11], 12, [[0, "1"], [3, "2"], [6, "3"], [9, "4"]]);
+necklace("tw-bossa", [0, 3, 6, 10, 13], 16, [[0, "1"], [4, "2"], [8, "3"], [12, "4"]]);
+
+// ---- harmonic palette: chords grouped by kind, three readings
+const kind = (c) => /dim7/.test(c) ? "diminished 7th" : /maj7/.test(c) ? "major 7th" : /m7/.test(c) ? "minor 7th" : /sus4/.test(c) ? "suspended" : /7/.test(c) ? "dominant 7th" : /m/.test(c.split("/")[0]) ? "minor" : "major";
+const groups = {};
+BWV846.bars.forEach((b) => { const k = kind(b.chord); (groups[k] ||= { bars: [], fn: {} }).bars.push(b); groups[k].fn[b.fn] = (groups[k].fn[b.fn] || 0) + 1; });
+const pal = document.getElementById("pal");
+function strip(title, items) {
+  pal.insertAdjacentHTML("beforeend", `<h4>${title}</h4><div class="strip">${items.map(([name, w, fn, sub]) => `<div class="chip ${fn}" style="flex:${w}"><b>${name}</b>${sub || ""}</div>`).join("")}</div>`);
+}
+const byTime = Object.entries(groups).sort((a, b) => b[1].bars.length - a[1].bars.length)
+  .map(([k, g]) => [k, g.bars.length, Object.entries(g.fn).sort((a, b) => b[1] - a[1])[0][0], `${g.bars.length} bars`]);
+strip("By time spent", byTime);
+strip("The skeleton (what the whole piece rests on)", [["C · home", 3, "T", "bars 1, 19, 35"], ["G · the long wait", 4, "D", "bars 24–31"], ["C · home, held", 2, "T", "bars 32–35"]]);
+const outside = BWV846.bars.filter((b) => /dim7|C7|D7/.test(b.chord) || b.applied);
+strip("The spice (chords that borrow notes from outside the key)", outside.slice(0, 8).map((b) => [b.chord.replace("dim7", "°7").replace("#", "♯").replace("b", "♭"), 1, b.fn, `bar ${b.bar}`]));
+</script>
+</body>
+</html>
