@@ -24,41 +24,44 @@ let W = 400, H = 400, x = () => 0, y = () => 0, lineEl = null, LUT = [];
 
 function smooth(p) { let d = `M${p[0][0].toFixed(1)} ${p[0][1].toFixed(1)}`; for (let i = 0; i < p.length - 1; i++) { const p0 = p[i - 1] || p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] || p2; d += ` C${(p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`; } return d; }
 
+// the window: Bars view shows a few bars at a time (readable on a phone) and follows the music; a navigator shows the whole piece
+const NV = 9; let v0 = 0;
+const view = () => (grain === "bar" ? { a: v0, n: NV } : { a: 0, n: NB });
+let xb = () => 0;
 function draw() {
   W = svg.clientWidth; H = svg.clientHeight; svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  const L = 22, R = 22, top = 40, base = H - 66, stripY = H - 50;
-  x = (i) => L + ((i + 0.5) / NB) * (W - L - R); y = (v) => base - v * (base - top);
-  const xg = ([a, z]) => [L + (a / NB) * (W - L - R), L + ((z + 1) / NB) * (W - L - R)];
+  const L = 22, R = 22, top = 52, base = H - 96, stripY = H - 84, labY = H - 52, navY = H - 26;
+  const { a: va, n } = view();
+  xb = (q) => L + ((q - va) / n) * (W - L - R); x = (i) => xb(i + 0.5); y = (v) => base - v * (base - top);
+  const xg = ([a, z]) => [xb(a), xb(z + 1)];
   const gs = GROUPS[grain];
   const pts = grain === "bar" ? soft1.map((v, i) => [x(i), y(v)]) : gs.map(([a, z]) => [(xg([a, z])[0] + xg([a, z])[1]) / 2, y(mean(a, z, RAW))]);
-  const P = [[L - 6, pts[0][1]], ...pts, [W - R + 6, pts[pts.length - 1][1]]], D = smooth(P);
+  const P = [[pts[0][0] - 30, pts[0][1]], ...pts, [pts[pts.length - 1][0] + 30, pts[pts.length - 1][1]]], D = smooth(P);
   const stops = (grain === "bar" ? B.map((b, i) => [x(i), b.fn]) : gs.map(([a, z]) => [(xg([a, z])[0] + xg([a, z])[1]) / 2, domFn(a, z)])).map(([px, f]) => `<stop offset="${(px / W).toFixed(4)}" stop-color="${FN[f]}"/>`).join("");
   let s = `<defs><linearGradient id="g" x1="0" x2="${W}" gradientUnits="userSpaceOnUse">${stops}</linearGradient>
     <linearGradient id="fade" x1="0" y1="${top}" x2="0" y2="${base}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-    <mask id="m"><path d="${D} L${W - R + 6} ${base} L${L - 6} ${base}Z" fill="url(#fade)"/></mask>
+    <mask id="m"><path d="${D} L${P[P.length - 1][0]} ${base} L${P[0][0]} ${base}Z" fill="url(#fade)"/></mask>
+    <clipPath id="area"><rect x="${L - 4}" y="0" width="${W - L - R + 8}" height="${H}"/></clipPath>
     <clipPath id="past"><rect id="pr" x="0" y="0" width="0" height="${H}"/></clipPath><clipPath id="fut"><rect id="fr" x="0" y="0" width="${W}" height="${H}"/></clipPath>
-    <filter id="blur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs>`;
-  // key: one quiet pill over the bars in G
-  if (layers.key) { const [x1, x2] = xg([4, 10]); s += `<line x1="${x1 + 2}" x2="${x2 - 2}" y1="16" y2="16" stroke="${FN.D}" stroke-width="2" stroke-linecap="round" opacity=".9"/><text x="${(x1 + x2) / 2}" y="10" font-size="11" font-weight="700" fill="${INK}" text-anchor="middle">in G</text><text x="${L}" y="10" font-size="11" font-weight="650" fill="${FAINT}">in C</text>`; }
-  // form: hairline dividers and names along the bottom
-  if (layers.form) SECTIONS.forEach(([a, z, t], k) => { const [x1, x2] = xg([a, z]); if (k) s += `<line x1="${x1}" x2="${x1}" y1="${top - 6}" y2="${base}" stroke="rgba(246,241,231,.08)"/>`; const w = x2 - x1, label = t.length * 5.6 > w ? t.split(" ").filter((p) => p.length > 2).pop() : t; s += `<text x="${(x1 + x2) / 2}" y="${H - 6}" font-size="10.5" font-weight="650" fill="${FAINT}" text-anchor="middle">${label}</text>`; });
-  // home baseline
-  s += `<line x1="${L}" x2="${W - R}" y1="${base}" y2="${base}" stroke="rgba(246,241,231,.18)" stroke-dasharray="2 4"/><text x="${W - R}" y="${base - 6}" font-size="10.5" font-weight="650" fill="${FAINT}" text-anchor="end">home</text>`;
-  // bass: a thin dashed line living in the lower part of the plot
-  if (layers.bass) { const by = (m) => base - 8 - ((m - 34) / 18) * 70; let d = ""; B.forEach((b, i) => { const m = b.voicing[0], a = x(i) - (W - L - R) / NB / 2, z = x(i) + (W - L - R) / NB / 2; d += `${i ? "L" : "M"}${a.toFixed(1)} ${by(m).toFixed(1)} L${z.toFixed(1)} ${by(m).toFixed(1)}`; }); s += `<path d="${d}" fill="none" stroke="${SOFT}" stroke-width="1.3" stroke-dasharray="4 3"/><text x="${xg([23, 30])[0] + 4}" y="${by(43) - 6}" font-size="10.5" font-weight="700" fill="${INK}">bass holds G</text>`; }
-  // the line: future quiet, past bright with a soft glow and a whisper of fill
-  s += `<g clip-path="url(#fut)"><path d="${D}" fill="none" stroke="url(#g)" stroke-width="2" opacity=".3"/></g>`;
-  s += `<g clip-path="url(#past)"><path d="${D} L${W - R + 6} ${base} L${L - 6} ${base}Z" fill="url(#g)" mask="url(#m)"/><path d="${D}" fill="none" stroke="url(#g)" stroke-width="6" opacity=".35" filter="url(#blur)"/><path id="ln" d="${D}" fill="none" stroke="url(#g)" stroke-width="2.6" stroke-linecap="round"/></g>`;
+    <filter id="blur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs><g clip-path="url(#area)">`;
+  // form: section names at the top, hairline dividers; key: a rose underline under the section that is in G
+  SECTIONS.forEach(([a, z, t], k) => { const [x1, x2] = xg([a, z]); if (x2 < L || x1 > W - R) return; if (layers.form) { if (k && x1 > L) s += `<line x1="${x1}" x2="${x1}" y1="${top - 14}" y2="${base}" stroke="rgba(246,241,231,.09)"/>`; const cx = Math.max(L + 4, x1 + 6), w = Math.min(x2, W - R) - cx; if (w > 40) s += `<text x="${cx}" y="22" font-size="12.5" font-weight="700" fill="${SOFT}">${t.length * 6.6 > w ? t.split(" ").filter((p2) => p2.length > 2).pop() : t}</text>`; } if (layers.key && k === 1) s += `<line x1="${Math.max(L, x1 + 6)}" x2="${Math.min(W - R, x2 - 6)}" y1="31" y2="31" stroke="${FN.D}" stroke-width="2.5" stroke-linecap="round"/>`; });
+  s += `<line x1="${L}" x2="${W - R}" y1="${base}" y2="${base}" stroke="rgba(246,241,231,.18)" stroke-dasharray="2 4"/><text x="${W - R}" y="${base - 7}" font-size="12" font-weight="650" fill="${FAINT}" text-anchor="end">home</text>`;
+  if (layers.bass) { const by = (m) => base - 10 - ((m - 34) / 18) * 80; let d = ""; B.forEach((b, i) => { const m = b.voicing[0]; d += `${i ? "L" : "M"}${xb(i).toFixed(1)} ${by(m).toFixed(1)} L${xb(i + 1).toFixed(1)} ${by(m).toFixed(1)}`; }); s += `<path d="${d}" fill="none" stroke="${SOFT}" stroke-width="1.6" stroke-dasharray="5 4"/>`; const bx = Math.max(L + 4, xb(23) + 4); if (xb(31) > L + 60) s += `<text x="${bx}" y="${by(43) - 8}" font-size="12.5" font-weight="700" fill="${INK}">bass holds G</text>`; }
+  s += `<g clip-path="url(#fut)"><path d="${D}" fill="none" stroke="url(#g)" stroke-width="2.4" opacity=".32"/></g>`;
+  s += `<g clip-path="url(#past)"><path d="${D} L${P[P.length - 1][0]} ${base} L${P[0][0]} ${base}Z" fill="url(#g)" mask="url(#m)"/><path d="${D}" fill="none" stroke="url(#g)" stroke-width="7" opacity=".35" filter="url(#blur)"/><path d="${D}" fill="none" stroke="url(#g)" stroke-width="3.2" stroke-linecap="round"/></g>`;
   s += `<path id="lnFull" d="${D}" fill="none" stroke="none"/>`;
-  // marks on the line: cadences (rings) and the squares (diamonds)
-  if (layers.marks && grain === "bar") { CAD.forEach((i) => { s += `<circle cx="${x(i)}" cy="${y(soft1[i]) - 12}" r="3.4" fill="none" stroke="${INK}" stroke-width="1.6"/>`; }); B.forEach((b, i) => { if (/dim7/.test(b.chord)) { const cx = x(i), cy = y(soft1[i]) - 12; s += `<path d="M${cx} ${cy - 4.5}L${cx + 4.5} ${cy}L${cx} ${cy + 4.5}L${cx - 4.5} ${cy}Z" fill="${FN.D}"/>`; } }); }
-  // the chord strip along the base
-  gs.forEach(([a, z], k) => { const [x1, x2] = xg([a, z]), f = grain === "bar" ? B[a].fn : domFn(a, z); s += `<rect class="blk" data-k="${k}" x="${(x1 + 1).toFixed(1)}" y="${stripY}" width="${(x2 - x1 - 2).toFixed(1)}" height="10" rx="3" fill="${FN[f]}" opacity=".55"/>`; if (grain !== "bar") { const lab = grain === "section" ? SECTIONS[k][2] : short(B[a].chord); const w = x2 - x1; if (lab.length * 6 < w) s += `<text x="${(x1 + x2) / 2}" y="${stripY + 26}" font-size="11" font-weight="700" fill="${SOFT}" text-anchor="middle">${lab}</text>`; } });
-  s += `<text id="clab" x="0" y="${stripY + 27}" font-size="12" font-weight="800" fill="${INK}" text-anchor="middle"></text>`;
-  // playhead and crosshair
-  s += `<line id="ch" x1="0" x2="0" y1="${top - 10}" y2="${stripY - 4}" stroke="${INK}" stroke-width="1" opacity="0"/><circle id="hg" r="12" fill="#fff8ea" opacity=".22" filter="url(#blur)"/><circle id="hd" r="5" fill="#fff8ea"/>`;
+  if (layers.marks && grain === "bar") { CAD.forEach((i) => { s += `<circle cx="${x(i)}" cy="${y(soft1[i]) - 16}" r="5" fill="none" stroke="${INK}" stroke-width="2"/>`; }); B.forEach((b, i) => { if (/dim7/.test(b.chord)) { const cx = x(i), cy = y(soft1[i]) - 16; s += `<path d="M${cx} ${cy - 6.5}L${cx + 6.5} ${cy}L${cx} ${cy + 6.5}L${cx - 6.5} ${cy}Z" fill="${FN.D}"/>`; } }); }
+  // the chord strip, with every visible chord named underneath
+  gs.forEach(([a, z], k) => { const [x1, x2] = xg([a, z]), f = grain === "bar" ? B[a].fn : domFn(a, z), w = x2 - x1; s += `<rect class="blk" data-k="${k}" x="${(x1 + 2).toFixed(1)}" y="${stripY}" width="${(w - 4).toFixed(1)}" height="12" rx="4" fill="${FN[f]}" opacity=".55"/>`; const lab = grain === "section" ? SECTIONS[k][2] : short(B[a].chord); const fs = grain === "bar" ? 14 : 12.5; if (lab.length * fs * 0.52 < w) s += `<text class="blab" data-k="${k}" x="${(x1 + x2) / 2}" y="${labY}" font-size="${fs}" font-weight="750" fill="${SOFT}" text-anchor="middle">${lab}</text>`; else if (grain !== "bar") { const sh = lab.split(" ").pop(); if (sh.length * fs * 0.52 < w) s += `<text class="blab" data-k="${k}" x="${(x1 + x2) / 2}" y="${labY}" font-size="${fs}" font-weight="750" fill="${SOFT}" text-anchor="middle">${sh}</text>`; } });
+  s += `<line id="ch" x1="0" x2="0" y1="${top - 18}" y2="${stripY - 4}" stroke="${INK}" stroke-width="1" opacity="0"/><circle id="hg" r="14" fill="#fff8ea" opacity=".22" filter="url(#blur)"/><circle id="hd" r="6" fill="#fff8ea"/></g>`;
+  // the navigator: the whole piece, small, with the window marked
+  const nx = (i) => L + (i / NB) * (W - L - R), ny = (v) => navY + 14 - v * 14;
+  s += `<path d="${soft1.map((v, i) => `${i ? "L" : "M"}${nx(i + 0.5).toFixed(1)} ${ny(v).toFixed(1)}`).join("")}" fill="none" stroke="${FAINT}" stroke-width="1.4"/>`;
+  if (grain === "bar") s += `<rect x="${nx(va)}" y="${navY - 3}" width="${nx(va + NV) - nx(va)}" height="20" rx="5" fill="rgba(246,241,231,.08)" stroke="rgba(246,241,231,.35)"/>`;
+  s += `<circle id="navd" r="3" fill="${INK}" cy="${navY + 7}"/>`;
   svg.innerHTML = s;
-  const full = svg.querySelector("#lnFull"), len = full.getTotalLength(); LUT = []; for (let k = 0; k <= 500; k++) { const p = full.getPointAtLength((k / 500) * len); LUT.push([p.x, p.y]); }
+  const full = svg.querySelector("#lnFull"), len = full.getTotalLength(); LUT = []; for (let k = 0; k <= 700; k++) { const p = full.getPointAtLength((k / 700) * len); LUT.push([p.x, p.y]); }
   update();
 }
 const yAt = (px) => { let lo = 0, hi = LUT.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (LUT[m][0] < px) lo = m; else hi = m; } const [x0, y0] = LUT[lo], [x1, y1] = LUT[hi]; return y0 + (y1 - y0) * ((px - x0) / (x1 - x0 || 1)); };
@@ -88,26 +91,29 @@ function update() {
   const sec = SECTIONS.find(([a, z]) => i >= a && i <= z);
   $("line2").innerHTML = `<b style="color:${FN[b.fn]}">${WORD[b.fn]}</b> · bar ${b.bar}${bass ? ` · over ${bass.replace("#", "♯")}` : ""} · ${sec[2]}`;
   // playhead / crosshair
-  const px = cursor != null ? x(cursor) : started ? 22 + S.progress() * (W - 44) : x(0), py = yAt(px);
+  if (grain === "bar" && cursor == null) { const pb = started ? S.bar() : 0; if (pb < v0 + 1 || pb > v0 + NV - 3) { const nv = Math.max(0, Math.min(NB - NV, pb - 2)); if (nv !== v0) { v0 = nv; draw(); return; } } }
+  const q = started ? S.pos() / 16 : 0.5, playX = started ? xb(q) : 0;
+  const px = cursor != null ? x(cursor) : started ? playX : x(0), py = yAt(px);
   const pr = svg.querySelector("#pr"), fr = svg.querySelector("#fr"); if (!pr) return;
-  const playX = started ? 22 + S.progress() * (W - 44) : 0; pr.setAttribute("width", playX); fr.setAttribute("x", playX);
+  pr.setAttribute("width", playX); fr.setAttribute("x", playX);
+  const nd = svg.querySelector("#navd"); if (nd) nd.setAttribute("cx", 22 + ((cursor != null ? cursor + 0.5 : q) / NB) * (W - 44));
   ["hd", "hg"].forEach((id) => { const c = svg.querySelector("#" + id); c.setAttribute("cx", px); c.setAttribute("cy", py); c.style.opacity = started || cursor != null ? "" : "0"; });
   const ch = svg.querySelector("#ch"); ch.setAttribute("x1", px); ch.setAttribute("x2", px); ch.setAttribute("opacity", cursor != null ? 0.55 : 0);
   const gs = GROUPS[grain], k = gs.findIndex(([a, z]) => i >= a && i <= z);
-  svg.querySelectorAll(".blk").forEach((r) => { const on = +r.dataset.k === k; r.setAttribute("opacity", on ? 1 : +r.dataset.k < k ? 0.8 : 0.4); r.setAttribute("height", on ? 16 : 10); r.setAttribute("y", on ? H - 53 : H - 50); });
-  const cl = svg.querySelector("#clab"); if (grain === "bar") { cl.textContent = short(b.chord); cl.setAttribute("x", Math.max(30, Math.min(W - 30, x(i)))); } else cl.textContent = "";
+  svg.querySelectorAll(".blk").forEach((r) => { const on = +r.dataset.k === k; r.setAttribute("opacity", on ? 1 : +r.dataset.k < k ? 0.8 : 0.4); r.setAttribute("height", on ? 18 : 12); r.setAttribute("y", on ? H - 87 : H - 84); });
+  svg.querySelectorAll(".blab").forEach((tx) => { const on = +tx.dataset.k === k; tx.setAttribute("fill", on ? INK : SOFT); tx.setAttribute("font-weight", on ? 850 : 700); });
   $("pp").innerHTML = S.playing() ? `<svg viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>` : `<svg viewBox="0 0 24 24"><path d="M8 4.5v15l12-7.5z" fill="currentColor"/></svg>`;
   $("dt").innerHTML = cursor != null ? `<b>Reading bar ${b.bar}</b>Let go to keep listening` : started ? `<b>${S.playing() ? "Playing" : "Paused"} · bar ${B[S.bar()].bar} of 35</b>Drag the chart to read any bar` : `<b>Press play</b>Or drag the chart to read any bar`;
 }
 
 // ---------- interaction
 const t = $("touch"); let down = null, moved = false;
-const idx = (e) => { const r = t.getBoundingClientRect(); return Math.max(0, Math.min(34, Math.floor(((e.clientX - r.left - 22) / (r.width - 44)) * NB))); };
+const idx = (e) => { const r = t.getBoundingClientRect(), { a, n } = view(); return Math.max(0, Math.min(34, a + Math.floor(((e.clientX - r.left - 22) / (r.width - 44)) * n))); };
 t.addEventListener("pointerdown", (e) => { down = e.clientX; moved = false; cursor = idx(e); update(); });
 t.addEventListener("pointermove", (e) => { if (down != null || e.pointerType === "mouse") { if (down != null && Math.abs(e.clientX - down) > 6) moved = true; cursor = idx(e); update(); } });
 t.addEventListener("pointerup", (e) => { if (!moved) { S.seekBar(idx(e)); if (!S.playing()) S.play(); } down = null; cursor = null; update(); });
 t.addEventListener("pointerleave", () => { down = null; cursor = null; update(); });
-document.querySelectorAll("#tf button").forEach((bt) => bt.addEventListener("click", () => { grain = bt.dataset.g; document.querySelectorAll("#tf button").forEach((o) => o.classList.toggle("on", o === bt)); draw(); }));
+document.querySelectorAll("#tf button").forEach((bt) => bt.addEventListener("click", () => { grain = bt.dataset.g; v0 = Math.max(0, Math.min(NB - NV, ((S.started() || S.pos() > 0) ? S.bar() : 0) - 2)); document.querySelectorAll("#tf button").forEach((o) => o.classList.toggle("on", o === bt)); draw(); }));
 document.querySelectorAll("#layers button").forEach((bt) => bt.addEventListener("click", () => { layers[bt.dataset.l] = !layers[bt.dataset.l]; bt.classList.toggle("on", layers[bt.dataset.l]); draw(); }));
 $("pp").addEventListener("click", () => S.toggle());
 S.onChange(update); S.onTick(update);
