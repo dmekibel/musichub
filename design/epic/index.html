@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0a20">
+<title>Light Score</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0c0a20; --ink: #f6f0e4; --soft: rgba(246,240,228,.62); --faint: rgba(246,240,228,.32); --hair: rgba(246,240,228,.12); --glass: rgba(246,240,228,.055); }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font: 400 15px/1.4 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; overscroll-behavior: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+  .top { position: fixed; left: 0; right: 0; top: 0; padding: calc(10px + env(safe-area-inset-top)) 18px 0; display: flex; align-items: center; justify-content: space-between; z-index: 2; }
+  .ttl { font-size: 13px; font-weight: 600; color: var(--soft); letter-spacing: .01em; }
+  .ttl b { color: var(--ink); font-weight: 700; }
+  /* segmented lens control with a sliding thumb */
+  .seg { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); padding: 3px; border-radius: 999px; background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); }
+  .seg button { position: relative; z-index: 1; height: 30px; padding: 0 14px; font-size: 13px; font-weight: 650; color: var(--soft); transition: color .3s; }
+  .seg button.on { color: #17132f; }
+  .seg i { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / 3); border-radius: 999px; background: var(--ink); transition: transform .45s cubic-bezier(.3,.9,.2,1); }
+
+  .hud { position: fixed; left: 18px; right: 18px; z-index: 2; pointer-events: none; }
+  .chord { font: 800 92px/0.82 Archivo; font-stretch: 62%; letter-spacing: -0.03em; display: flex; align-items: flex-start; gap: 4px; }
+  .chord sup { font-size: .38em; margin-top: .08em; letter-spacing: 0; }
+  .chord small { font-size: .26em; font-stretch: 100%; font-weight: 600; letter-spacing: 0; color: var(--soft); align-self: flex-end; margin: 0 0 .5em 6px; }
+  .fnline { margin-top: 10px; font-size: 16px; color: var(--soft); } .fnline b { color: var(--ink); font-weight: 700; }
+
+  /* the sheet: glass, no outlined pills */
+  .sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 2; padding: 14px 18px calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(to top, rgba(12,10,32,.92) 55%, rgba(12,10,32,0)); }
+  .pyr { display: grid; gap: 3px; }
+  .row { display: flex; gap: 2px; height: 7px; transition: height .35s cubic-bezier(.3,.9,.2,1); cursor: pointer; }
+  .row.sel { height: 34px; }
+  .blk { position: relative; min-width: 0; border-radius: 3px; background: var(--c); opacity: .38; transition: opacity .3s; overflow: hidden; }
+  .row.sel .blk { opacity: .78; }
+  .blk.past { opacity: .62; } .row.sel .blk.past { opacity: 1; }
+  .blk.now { opacity: 1; box-shadow: 0 0 0 1.5px var(--ink); }
+  .blk.in { opacity: .95; }
+  .acc { display: inline-block; width: .3em; height: .66em; margin: .02em .02em 0 .02em; }
+  .chord small .acc { height: .7em; }
+  .blk span { position: absolute; left: 5px; bottom: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; color: var(--t); }
+  .rowlab { display: flex; justify-content: space-between; margin: 10px 0 2px; font-size: 12.5px; font-weight: 650; color: var(--soft); }
+  .rowlab b { color: var(--ink); }
+
+  .sliders { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .sl label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 650; color: var(--soft); }
+  .sl label b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; margin-top: 2px; }
+  input[type=range]::-webkit-slider-runnable-track { height: 3px; border-radius: 2px; background: linear-gradient(to right, var(--ink) var(--p, 50%), var(--hair) var(--p, 50%)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9.5px; border-radius: 50%; background: var(--ink); box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+  input[type=range]::-moz-range-track { height: 3px; background: var(--hair); }
+  input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border: 0; border-radius: 50%; background: var(--ink); }
+
+  .transport { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin-top: 10px; }
+  .play { width: 66px; height: 66px; border-radius: 50%; background: var(--ink); color: #17132f; display: grid; place-items: center; box-shadow: 0 8px 30px rgba(0,0,0,.45), 0 0 0 6px rgba(246,240,228,.06); transition: transform .15s; }
+  .play:active { transform: scale(.94); }
+  .play svg { width: 24px; height: 24px; }
+  .side { display: flex; gap: 6px; align-items: center; }
+  .side.r { justify-content: flex-end; }
+  .ic { height: 40px; min-width: 40px; padding: 0 10px; border-radius: 12px; display: grid; place-items: center; font-weight: 700; font-size: 14px; color: var(--soft); font-variant-numeric: tabular-nums; }
+  .ic svg { width: 22px; height: 22px; }
+  .ic.on { color: var(--ink); background: var(--glass); }
+  .tap { position: fixed; left: 0; right: 0; top: 70px; height: 45vh; z-index: 1; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="tap" id="tap"></div>
+<header class="top">
+  <span class="ttl"><b>Prelude in C</b> · Bach</span>
+  <nav class="seg" id="seg"><i></i><button data-m="clock" class="on">Light</button><button data-m="tunnel">Tunnel</button><button data-m="roll">Roll</button></nav>
+</header>
+<div class="hud" id="hud"><div class="chord" id="chord"></div><p class="fnline" id="fnline"></p></div>
+<section class="sheet">
+  <div class="pyr" id="pyr"></div>
+  <div class="rowlab"><span id="grainlab"></span><span id="barlab"></span></div>
+  <div class="sliders">
+    <div class="sl"><label>Group <b id="gv"></b></label><input type="range" id="grain" min="0" max="4" step="1" value="0"></div>
+    <div class="sl"><label>Memory <b id="mv"></b></label><input type="range" id="mem" min="0" max="100" value="40"></div>
+    <div class="sl"><label>Key <b id="kv"></b></label><input type="range" id="tr" min="-6" max="6" step="1" value="0"></div>
+  </div>
+  <div class="transport">
+    <div class="side"><button class="ic" id="loop" aria-label="Loop this group"><svg viewBox="0 0 24 24"><path d="M5 10V8a2 2 0 0 1 2-2h11l-3-3M19 14v2a2 2 0 0 1-2 2H6l3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="ic" id="prev" aria-label="Back one group"><svg viewBox="0 0 24 24"><path d="M6 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 5.5v13L9 12z" fill="currentColor"/></svg></button></div>
+    <button class="play" id="pp" aria-label="Play"></button>
+    <div class="side r"><button class="ic" id="next" aria-label="Forward one group"><svg viewBox="0 0 24 24"><path d="M18 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 5.5v13L15 12z" fill="currentColor"/></svg></button><button class="ic" id="tempo" aria-label="Tempo">66</button></div>
+  </div>
+</section>
+<script type="module" src="epic.js?v=2"></script>
+</body>
+</html>
