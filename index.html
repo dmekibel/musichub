@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0E0D0B">
+  <meta name="description" content="See the music theory of a piece while it plays.">
+  <title>MusicHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand">MusicHub</span>
+    <span class="brand-sub">prototype · one piece</span>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow" id="composer"></p>
+      <h1 id="title"></h1>
+      <p class="work" id="work"></p>
+    </section>
+
+    <section class="spine card" aria-label="The whole piece">
+      <div class="spine-head-row">
+        <h2 class="small-head">The whole piece</h2>
+        <div class="focus" id="focus" hidden>
+          <span id="focus-text"></span>
+          <button id="focus-clear" aria-label="Clear highlight">✕</button>
+        </div>
+      </div>
+      <div id="spine"></div>
+    </section>
+
+    <div class="layout">
+      <section class="stage card" aria-label="Lenses">
+        <div class="stage-head">
+          <div class="tabs" role="tablist" aria-label="Lens">
+            <button role="tab" data-lens="journey" aria-selected="true">Journey</button>
+            <button role="tab" data-lens="clock" aria-selected="false">Chords</button>
+            <button role="tab" data-lens="roll" aria-selected="false">Notes</button>
+          </div>
+          <div class="seg" id="colorby" role="group" aria-label="Color by" hidden>
+            <span class="seg-label">Color by</span>
+            <button data-colorby="fn" aria-pressed="true">Function</button>
+            <button data-colorby="note" aria-pressed="false">Note</button>
+          </div>
+        </div>
+        <p class="lens-caption" id="lens-caption"></p>
+        <div class="lens" id="lens-journey"></div>
+        <div class="lens" id="lens-clock" hidden></div>
+        <div class="lens lens-roll" id="lens-roll" hidden></div>
+        <div class="legend" id="note-legend" hidden aria-label="Note colors, around the circle of fifths"></div>
+        <div class="lens-tools" id="lens-tools" hidden>
+          <button class="ghostbtn" id="axes-toggle" aria-pressed="false">Diminished squares</button>
+          <p class="axes-note" id="axes-note" hidden>All 12 notes split into exactly three diminished chords. Barry Harris built his harmony on them, and Bartók's "axis system" groups keys the same way. Every chord here sits close to one of these squares.</p>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="now card" aria-live="polite">
+          <div class="now-top">
+            <span id="now-bar" class="mono muted"></span>
+            <span id="now-key" class="muted"></span>
+          </div>
+          <div class="now-main">
+            <div id="now-chord" class="now-chord"></div>
+            <div class="now-meta">
+              <span id="now-rn" class="rn"></span>
+              <span id="now-fn" class="fnbadge"></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="story card">
+          <div class="story-head">
+            <h2 id="story-title"></h2>
+            <span id="story-bars" class="mono muted"></span>
+          </div>
+          <p id="story-text"></p>
+          <p id="story-bar" class="story-bar" hidden></p>
+        </section>
+
+        <section class="numbers card" aria-label="By the numbers">
+          <h2 class="small-head">By the numbers</h2>
+          <div id="numbers-list"></div>
+          <details class="method">
+            <summary>How we estimate tension</summary>
+            <p>Tension here is an estimate, not a measurement. Each bar scores higher for tension (dominant) chords, for clashing intervals (semitones and tritones, after Plomp and Levelt's work on roughness), for being away from the home key, for borrowed chords, and for notes outside C major. Real listener data and style statistics come later.</p>
+          </details>
+        </section>
+      </aside>
+    </div>
+
+
+    <footer class="credits">
+      <p>Score: J. S. Bach, public domain (Bach-Gesellschaft text). Sound is synthesized in your browser. Analysis checked against every note.</p>
+    </footer>
+  </main>
+
+  <div class="transport" role="group" aria-label="Playback">
+    <button id="restart" class="iconbtn" aria-label="Back to the start">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5v14M19 5 9 12l10 7z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </button>
+    <button id="play" class="playbtn" aria-label="Play">
+      <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+      <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+    </button>
+    <div class="tempo">
+      <label for="tempo" class="muted">♩ = <span id="tempo-val" class="mono"></span></label>
+      <input id="tempo" type="range" min="40" max="112" step="1">
+    </div>
+    <span class="scrub mono muted">bar <span id="scrub-bar">1</span></span>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
