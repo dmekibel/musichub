@@ -32,12 +32,15 @@ export function lab() {
 
   return {
     html,
-    mount(root) {
+    async mount(root) {
+      const S = await import("../sound.js");
+      const hear = (pcs) => S.chord(pcs.map((p) => 60 + p));
       const svg = root.querySelector("#clock"), read = root.querySelector("#read"), kidsEl = root.querySelector("#kids");
       let sq = 1, mode = "down", moved = null;
       const R = 140, P = (pc, r = R) => [r * Math.sin((pc / 12) * Math.PI * 2), -r * Math.cos((pc / 12) * Math.PI * 2)];
       const childName = (x) => (mode === "down" ? `${PC[(x + 11) % 12]}7` : `${PC[(x + 6) % 12]}m6`);
       const childWords = () => (mode === "down" ? "dominant seventh" : "minor sixth");
+      const current = () => SQUARES[sq].pcs.map((p) => (p === moved ? (mode === "down" ? (p + 11) % 12 : (p + 1) % 12) : p));
       function draw() {
         const q = SQUARES[sq], col = hc(q.h);
         let s = `<circle r="${R}" fill="none" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>`;
@@ -52,14 +55,14 @@ export function lab() {
         }
         q.pcs.forEach((p) => { const [x, y] = P(p); s += `<circle class="hit" data-p="${p}" cx="${x}" cy="${y}" r="26" fill="transparent"/>`; });
         svg.innerHTML = s;
-        svg.querySelectorAll(".hit").forEach((c) => c.addEventListener("click", () => { const p = +c.dataset.p; moved = moved === p ? null : p; draw(); }));
+        svg.querySelectorAll(".hit").forEach((c) => c.addEventListener("click", () => { const p = +c.dataset.p; moved = moved === p ? null : p; draw(); hear(current()); }));
         read.innerHTML = moved == null
           ? `<p class="kicker">${q.axis}</p><div class="disp">${q.names.join(" · ")}</div><p class="t-m soft" style="margin-top:6px">A perfect square: every note a minor third from the next. Tap a corner.</p>`
           : `<p class="kicker">${childWords()} · one note moved</p><div class="disp">${childName(moved)}</div><p class="t-m soft" style="margin-top:6px">${PC[moved]} ${mode === "down" ? "drops" : "rises"} a half step. The other three notes stay put.</p>`;
         kidsEl.innerHTML = q.pcs.map((p) => `<button data-p="${p}" class="${p === moved ? "on" : ""}">${childName(p)}</button>`).join("");
-        kidsEl.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { moved = +b.dataset.p; draw(); }));
+        kidsEl.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { moved = +b.dataset.p; draw(); hear(current()); }));
       }
-      root.querySelectorAll("#pick button").forEach((b) => b.addEventListener("click", () => { sq = +b.dataset.i; moved = null; root.querySelectorAll("#pick button").forEach((x) => x.classList.toggle("on", x === b)); draw(); }));
+      root.querySelectorAll("#pick button").forEach((b) => b.addEventListener("click", () => { sq = +b.dataset.i; moved = null; root.querySelectorAll("#pick button").forEach((x) => x.classList.toggle("on", x === b)); draw(); hear(current()); }));
       root.querySelectorAll("#mode button").forEach((b) => b.addEventListener("click", () => { mode = b.dataset.m; root.querySelectorAll("#mode button").forEach((x) => x.classList.toggle("on", x === b)); draw(); }));
       moved = 10; // start on a real example: C# square, B♭ lowered → A7
       draw();

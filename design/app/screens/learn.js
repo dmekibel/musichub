@@ -1,6 +1,7 @@
 // Learn: the Path, a lesson step, and the Ear gym.
 // Rule for tests: color means harmony, so nothing that's being tested wears its color until the answer.
-import { sleeve, shell, page, roomHead, ICON } from "../ui.js";
+import { sleeve, shell, page, roomHead, ICON, hc } from "../ui.js";
+import { BACH } from "../data.js";
 
 const lenses = (on) => `<nav class="lenses">${[["learn", "Path"], ["gym", "Ear gym"], ["learn", "Masters"]].map(([id, l], i) => `<a href="#${id}" class="${(on === "path" && i === 0) || (on === "gym" && i === 1) ? "on" : ""}">${l}</a>`).join("")}</nav>`;
 
@@ -38,28 +39,53 @@ export function learn() {
 }
 
 export function lesson() {
-  const opt = (k, on) => `<a class="opt${on ? " on" : ""}"><span class="lbl disp">${k}</span><span class="wave">${Array.from({ length: 22 }, (_, i) => `<i style="height:${8 + Math.round(20 * Math.abs(Math.sin(i * (k === "A" ? 0.9 : 0.55))))}px"></i>`).join("")}</span><span class="play">${ICON.play}</span></a>`;
-  return page(`
+  const opt = (k) => `<div class="opt" data-k="${k}"><span class="lbl disp">${k}</span><span class="wave">${Array.from({ length: 22 }, (_, i) => `<i style="height:${8 + Math.round(20 * Math.abs(Math.sin(i * (k === "A" ? 0.9 : 0.55))))}px"></i>`).join("")}</span><button class="play" data-k="${k}" aria-label="Play ${k}">${ICON.play}</button><span class="rev"></span></div>`;
+  const html = page(`
     <div class="lhead"><a href="#learn" class="x">✕</a><div class="segs">${[1, 1, 1, 0, 0, 0, 0, 0].map((d, i) => `<i class="${d ? "d" : i === 3 ? "c" : ""}"></i>`).join("")}</div></div>
     <p class="kicker" style="margin-top:26px">Lesson 3 · Hearing tension · from the Prelude in C</p>
     <h1 class="disp" style="font-size:52px;margin-top:8px">Which one wants to move?</h1>
-    <p class="t-m soft" style="margin-top:10px">Two chords from bars 11 and 12. One is settled, one leans forward.</p>
-    <div class="opts">${opt("A", false)}${opt("B", true)}</div>
-    <p class="t-s soft" style="text-align:center;margin-top:18px">Listen to both as often as you like. Guess before you check: a wrong guess still helps you remember.</p>
-    <div class="lfoot"><a class="btn" style="width:100%">Check</a></div>
+    <p class="t-m soft" style="margin-top:10px">Two chords from bars 11 and 12. One is settled, one leans forward. Play both, then pick.</p>
+    <div class="opts">${opt("A")}${opt("B")}</div>
+    <p class="t-s soft" id="hint" style="text-align:center;margin-top:18px">Guess before you check: a wrong guess still helps you remember.</p>
+    <div class="lfoot"><button class="btn" id="check" style="width:100%" disabled>Check</button></div>
     <style>
       .lhead { display: flex; align-items: center; gap: 14px; height: 44px; }
       .x { font-size: 20px; color: var(--soft); width: 28px; }
       .segs { flex: 1; display: flex; gap: 4px; } .segs i { flex: 1; height: 6px; border-radius: 3px; background: var(--paper-2); } .segs i.d { background: var(--ink); } .segs i.c { background: var(--faint); }
       .opts { display: grid; gap: 12px; margin-top: 26px; }
-      .opt { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 16px; background: var(--card); box-shadow: inset 0 0 0 1.5px var(--hair); }
-      .opt.on { box-shadow: inset 0 0 0 2px var(--ink); }
+      .opt { position: relative; display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 16px; background: var(--card); box-shadow: inset 0 0 0 1.5px var(--hair); cursor: pointer; transition: background .5s, box-shadow .2s; }
+      .opt.on { box-shadow: inset 0 0 0 2.5px var(--ink); }
       .opt .lbl { font-size: 40px; width: 30px; }
       .wave { flex: 1; display: flex; align-items: center; gap: 3px; height: 40px; } .wave i { flex: 1; border-radius: 2px; background: var(--faint); }
       .opt.on .wave i { background: var(--ink); }
-      .play { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 1.5px var(--ink); } .play svg { width: 18px; height: 18px; margin-left: 2px; }
-      .lfoot { margin-top: 40px; }
+      .play { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 1.5px var(--ink); color: var(--ink); flex: none; } .play svg { width: 18px; height: 18px; margin-left: 2px; }
+      .rev { position: absolute; left: 62px; bottom: 6px; font-size: 13px; font-weight: 650; }
+      .opt.shown { color: var(--i); } .opt.shown .wave i, .opt.shown .lbl { color: var(--i); background: currentColor; } .opt.shown .lbl { background: none; }
+      .lfoot { margin-top: 40px; } .btn[disabled] { opacity: .4; }
     </style>`);
+  return {
+    html,
+    async mount(root) {
+      const S = await import("../sound.js");
+      const V = { A: BACH.bars[10], B: BACH.bars[11] };
+      let pick = null, done = false;
+      root.querySelectorAll(".play").forEach((b) => b.addEventListener("click", (e) => { e.stopPropagation(); S.chord(V[b.dataset.k].voicing, 2); }));
+      root.querySelectorAll(".opt").forEach((o) => o.addEventListener("click", () => { if (done) return; pick = o.dataset.k; root.querySelectorAll(".opt").forEach((x) => x.classList.toggle("on", x === o)); root.querySelector("#check").disabled = false; S.chord(V[pick].voicing, 1.6); }));
+      root.querySelector("#check").addEventListener("click", () => {
+        if (!pick) return;
+        if (done) { location.hash = "#learn"; return; }
+        done = true;
+        const right = pick === "B";
+        root.querySelectorAll(".opt").forEach((o) => {
+          const k = o.dataset.k, c = hc(k === "A" ? 0 : 1);
+          o.classList.add("shown"); o.style.background = c.field; o.style.setProperty("--i", c.ink);
+          o.querySelector(".rev").textContent = k === "A" ? "G major · settled (home in G)" : "C♯°7 · tension, leans to D minor";
+        });
+        root.querySelector("#hint").innerHTML = right ? "<b>Right.</b> The square (C♯°7) wants to move; G is settled." : "<b>Not this time.</b> Listen again: the square (C♯°7) is the one that leans forward.";
+        root.querySelector("#check").textContent = "Continue";
+      });
+    },
+  };
 }
 
 export function gym() {

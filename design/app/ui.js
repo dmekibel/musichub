@@ -111,10 +111,10 @@ export const ICON = {
 const ROOMS = [["today", "Today"], ["explore", "Explore"], ["learn", "Learn"], ["lab", "Lab"]];
 export function shell(room, body, { mini = true } = {}) {
   const tabs = ROOMS.map(([id, label]) => `<a href="#${id}" class="${id === room ? "on" : ""}">${label}</a>`).join("");
-  const miniHTML = mini ? `<a class="mini" href="#player">
+  const miniHTML = mini ? `<a class="mini" href="#player" hidden>
       ${sleeve({ h: 0.62, shape: "wheel", data: { fns: "TSDTSDTSSDTDSDTSSDTDSDDDDDDDDDDTSDT".split("") }, size: "xs" })}
-      <span class="txt"><b>Prelude in C · Bach</b><span>bar 12 · C♯°7 · tension</span></span>
-      <span class="pl">${ICON.play}</span><span class="prog"><i style="width:33%"></i></span></a>` : "";
+      <span class="txt"><b>Prelude in C · Bach</b><span id="mini-sub"></span></span>
+      <button class="pl" data-act="toggle" aria-label="Play or pause">${ICON.play}</button><span class="prog"><i id="mini-prog"></i></span></a>` : "";
   return `<main class="screen">${body}</main>${miniHTML}<nav class="tabbar">${tabs}</nav>`;
 }
 export const page = (body) => `<main class="screen full">${body}</main>`;

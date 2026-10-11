@@ -14,7 +14,8 @@ export const dialsOf = (v) => ({ key: dft(v, 5), squares: dft(v, 4), triangles: 
 const NB = BWV846.bars.length;
 const barPc = Array.from({ length: NB }, () => new Array(12).fill(0));
 const allPc = new Array(12).fill(0);
-for (const [on, len, m] of BWV846_NOTES.notes) { const b = Math.min(NB - 1, Math.floor(on / 16)); barPc[b][m % 12] += len; allPc[m % 12] += len; }
+const voicing = Array.from({ length: NB }, () => new Set());
+for (const [on, len, m] of BWV846_NOTES.notes) { const b = Math.min(NB - 1, Math.floor(on / 16)); barPc[b][m % 12] += len; allPc[m % 12] += len; if (on % 16 < 8) voicing[b].add(m); }
 
 // the Harmony Atlas address of each bar, read in C (bars 5–11 visit G; shown here as their meaning in C)
 const ADDR = ["I", "ii", "V", "I", "vi", "V/V", "V", "I", "vi", "V/V", "V", "vii°/ii", "ii", "vii°", "I", "IV", "ii", "V", "I", "V/IV", "IV", "vii°/V", "vii°", "V", "I⁶₄", "V", "V", "vii°/V", "I⁶₄", "V", "V", "I", "IV", "V", "I"];
@@ -22,7 +23,7 @@ const ADDR = ["I", "ii", "V", "I", "vi", "V/V", "V", "I", "vi", "V/V", "V", "vii
 export const BACH = {
   id: "bach", title: "Prelude in C", composer: "J. S. Bach", year: 1722, h: 0.62,
   work: "The Well-Tempered Clavier, Book I",
-  bars: BWV846.bars.map((b, i) => ({ ...b, addr: ADDR[i], dials: dialsOf(barPc[i]) })),
+  bars: BWV846.bars.map((b, i) => ({ ...b, addr: ADDR[i], dials: dialsOf(barPc[i]), pcs: barPc[i].map((w, pc) => (w ? pc : -1)).filter((pc) => pc >= 0), voicing: [...voicing[i]].sort((a, c) => a - c) })),
   sections: BWV846.sections,
   fns: BWV846.bars.map((b) => b.fn),
   dials: dialsOf(allPc),

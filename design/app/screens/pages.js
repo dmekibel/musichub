@@ -40,7 +40,7 @@ export function piece() {
     ${sleeve({ h: BACH.h, shape: "wheel", data: { fns: BACH.fns }, name: "Prelude\nin C", tag: "J. S. Bach · 1722", size: "xl" })}
     <p class="kicker lead">Piece · The Well-Tempered Clavier, Book I</p>
     <p class="t-l" style="margin-top:4px">Thirty-five bars, one chord each: the most famous trip from home and back.</p>
-    <div class="actions"><a class="btn" href="#player">${ICON.play}Listen</a><a class="btn ghost">${ICON.save}Save</a><a class="btn ghost" href="#share">${ICON.share}</a></div>
+    <div class="actions"><button class="btn" data-act="listen">${ICON.play}Listen</button><button class="btn ghost" data-act="save">${ICON.save}<span>Save</span></button><button class="btn ghost" data-act="share">${ICON.share}</button></div>
 
     <nav class="lenses"><a class="on">Harmony</a><a>Shape</a><a>Rhythm</a><a>Form</a><a>Story</a></nav>
     <section class="sec" style="margin-top:18px">
@@ -86,7 +86,7 @@ export function style() {
     ${topBar("", ICON.share)}
     ${sleeve({ h: S.h, shape: "necklace", data: { on: S.clave, n: 16 }, name: "Bossa\nnova", tag: "Style · Rio de Janeiro, late 1950s", size: "xl" })}
     <p class="t-l lead">${S.line}</p>
-    <div class="actions"><a class="btn">${ICON.play}Listen · 12 pieces</a><a class="btn ghost">${ICON.save}Save</a></div>
+    <div class="actions"><button class="btn" data-act="rhythm" data-on="${S.clave.join(",")}" data-n="16">${ICON.play}Hear the clave</button><button class="btn ghost" data-act="save">${ICON.save}<span>Save</span></button></div>
 
     <nav class="lenses"><a class="on">Rhythm</a><a>Harmony</a><a>Shape</a><a>People</a><a>Story</a></nav>
     <section class="sec" style="margin-top:18px">
@@ -122,12 +122,12 @@ export function style() {
 
 // ---------- shape
 export function shape() {
-  const kids = SQUARES.map((q) => `<a class="tile" href="#lab" style="text-align:center">${sleeve({ h: q.h, shape: "chord", data: { pcs: q.pcs }, size: "m" })}<b>${q.names.join(" ")}</b><span>${q.axis}</span></a>`).join("");
+  const kids = SQUARES.map((q) => `<a class="tile" data-act="chord" data-notes="${q.pcs.map((p) => 60 + p).join(",")}" style="text-align:center">${sleeve({ h: q.h, shape: "chord", data: { pcs: q.pcs }, size: "m" })}<b>${q.names.join(" ")}</b><span>${q.axis}</span></a>`).join("");
   return page(`${css}
     ${topBar("", ICON.share)}
     ${sleeve({ h: 1, shape: "chord", data: { pcs: [0, 3, 6, 9] }, name: "The\nsquare", tag: "Shape · 4 notes in 12, perfectly even", size: "xl" })}
     <p class="t-l lead">Four notes, each a minor third apart: a perfect square on the 12-note clock. Musicians call it the diminished seventh. There are only three.</p>
-    <div class="actions"><a class="btn">${ICON.play}Hear it</a><a class="btn ghost" href="#lab">Try it in the Lab</a></div>
+    <div class="actions"><button class="btn" data-act="chord" data-notes="60,63,66,69">${ICON.play}Hear it</button><a class="btn ghost" href="#lab">Try it in the Lab</a></div>
 
     <section class="sec">
       <div class="sec-h"><h2 class="disp">The only three</h2></div>
