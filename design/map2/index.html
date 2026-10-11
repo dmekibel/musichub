@@ -3,45 +3,60 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#363a66">
+<meta name="theme-color" content="#57546d">
 <title>Chord Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
 <style>
-  :root { --ink: #f6f1e7; --soft: rgba(246,241,231,.68); --faint: rgba(246,241,231,.36); --hair: rgba(246,241,231,.14); --glass: rgba(246,241,231,.08); }
+  :root { --ink: #faf5ee; --soft: rgba(250,245,238,.72); --faint: rgba(250,245,238,.42); --hair: rgba(250,245,238,.16); --glass: rgba(250,245,238,.1);
+          --T: #f4c8a0; --S: #b7d4c2; --D: #e9b4bf; --dark: #3a3346; }
   * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
-  body { background: radial-gradient(120% 90% at 50% 35%, #41457a 0%, #363a66 50%, #2c2f57 100%); color: var(--ink); font: 400 15px/1.4 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: linear-gradient(170deg, #5d5a74 0%, #54516b 55%, #4b4962 100%); color: var(--ink); font: 400 15px/1.4 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
   #map { position: fixed; inset: 0; width: 100%; height: 100%; touch-action: none; }
   #map text { font-family: Archivo; pointer-events: none; }
-  .top { position: fixed; top: 0; left: 0; right: 0; padding: calc(12px + env(safe-area-inset-top)) 18px 0; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+  .top { position: fixed; top: 0; left: 0; right: 0; padding: calc(12px + env(safe-area-inset-top)) 18px 10px; background: linear-gradient(#5d5a74 55%, rgba(93,90,116,0)); pointer-events: none; }
   .top > * { pointer-events: auto; }
+  .row { display: flex; align-items: center; justify-content: space-between; }
   .ttl { font: 800 30px/0.9 Archivo; font-stretch: 62%; letter-spacing: -0.02em; }
-  .ttl small { display: block; font: 600 12.5px Archivo; color: var(--soft); letter-spacing: 0; margin-top: 4px; font-stretch: 100%; }
-  .key { height: 34px; padding: 0 12px; border-radius: 999px; font-size: 13.5px; font-weight: 750; background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); }
-  .card { position: fixed; left: 12px; right: 12px; bottom: calc(86px + env(safe-area-inset-bottom)); padding: 12px 12px 12px 16px; border-radius: 18px; background: rgba(40,42,80,.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px var(--hair), 0 16px 40px rgba(10,10,30,.35); display: flex; align-items: center; gap: 12px; transform: translateY(16px); opacity: 0; pointer-events: none; transition: all .25s cubic-bezier(.3,.9,.2,1); }
+  .key { height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13.5px; font-weight: 700; background: var(--glass); }
+  .routes { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 12px -18px 0; padding: 0 18px; }
+  .routes::-webkit-scrollbar { display: none; }
+  .routes .lab { flex: none; font-size: 12.5px; color: var(--faint); align-self: center; margin-right: 2px; }
+  .routes button { flex: none; height: 32px; padding: 0 13px; border-radius: 999px; font-size: 13px; font-weight: 650; color: var(--soft); background: var(--glass); }
+  .routes button.on { background: var(--ink); color: var(--dark); }
+  .card { position: fixed; left: 12px; right: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); padding: 14px 16px; border-radius: 20px; background: #faf5ee; color: var(--dark); box-shadow: 0 14px 36px rgba(30,25,45,.28); transform: translateY(14px); opacity: 0; pointer-events: none; transition: transform .28s cubic-bezier(.3,.9,.2,1), opacity .2s; }
   .card.show { transform: none; opacity: 1; pointer-events: auto; }
+  .card .hd { display: flex; align-items: center; gap: 10px; }
   .card .nm { font: 800 34px/0.9 Archivo; font-stretch: 62%; letter-spacing: -0.02em; }
-  .card .tx { flex: 1; min-width: 0; font-size: 13.5px; color: var(--soft); line-height: 1.35; }
-  .card .tx b { color: var(--ink); }
-  .card .add { height: 40px; padding: 0 14px; border-radius: 999px; background: var(--ink); color: #2d2f55; font-weight: 800; font-size: 14px; flex: none; }
-  .dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 10px; background: linear-gradient(to top, rgba(40,42,80,.95) 60%, rgba(40,42,80,0)); }
+  .card .job { font-size: 12.5px; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+  .card .add { margin-left: auto; height: 38px; padding: 0 16px; border-radius: 999px; background: var(--dark); color: #faf5ee; font-weight: 750; font-size: 14px; }
+  .card .feel { font-size: 14px; color: rgba(58,51,70,.72); margin-top: 6px; }
+  .rel { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; align-items: center; margin-top: 10px; }
+  .rel .k { font-size: 12px; font-weight: 750; color: rgba(58,51,70,.55); white-space: nowrap; }
+  .rel .v { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  .rel .v::-webkit-scrollbar { display: none; }
+  .rel .v button { flex: none; height: 30px; padding: 0 11px; border-radius: 999px; font-size: 13.5px; font-weight: 750; color: var(--dark); }
+  .dock { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 10px; background: linear-gradient(to top, #4b4962 62%, rgba(75,73,98,0)); }
   .prog { flex: 1; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; min-height: 44px; align-items: center; }
   .prog::-webkit-scrollbar { display: none; }
   .prog .hint { font-size: 13px; color: var(--soft); padding-left: 6px; }
-  .pc { flex: none; height: 42px; min-width: 46px; padding: 0 10px; border-radius: 12px; font: 800 16px Archivo; font-stretch: 75%; color: #2d2f55; }
-  .pc.now { transform: translateY(-3px); box-shadow: 0 0 0 2px var(--ink); }
-  .btn { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; flex: none; }
-  .btn.play { background: var(--ink); color: #2d2f55; } .btn svg { width: 19px; height: 19px; }
-  .btn.ghost { background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); font-size: 12px; font-weight: 800; width: auto; padding: 0 12px; border-radius: 999px; height: 40px; }
+  .pc { flex: none; height: 42px; min-width: 46px; padding: 0 11px; border-radius: 13px; font: 800 16px Archivo; font-stretch: 75%; color: var(--dark); transition: transform .2s; }
+  .pc.now { transform: translateY(-4px); box-shadow: 0 6px 14px rgba(30,25,45,.3); }
+  .btn { flex: none; display: grid; place-items: center; }
+  .btn.play { width: 50px; height: 50px; border-radius: 50%; background: var(--ink); color: var(--dark); box-shadow: 0 6px 18px rgba(30,25,45,.3); } .btn svg { width: 19px; height: 19px; }
+  .btn.ghost { height: 34px; padding: 0 12px; border-radius: 999px; background: var(--glass); font-size: 12.5px; font-weight: 700; }
 </style>
 </head>
 <body>
 <svg id="map"></svg>
-<header class="top"><div class="ttl">Chord map<small>Tap to play · drag to explore · pinch to zoom</small></div><button class="key" id="key">Key of C</button></header>
-<div class="card" id="card"><div class="nm" id="cnm"></div><div class="tx" id="ctx"></div><button class="add" id="cadd">+ Add</button></div>
-<div class="dock"><div class="prog" id="prog"></div><button class="btn ghost" id="bach">Bach</button><button class="btn play" id="pp" aria-label="Play"></button></div>
-<script type="module" src="map2.js?v=3"></script>
+<header class="top">
+  <div class="row"><div class="ttl">Chord map</div><button class="key" id="key">Key of C</button></div>
+  <div class="routes" id="routes"></div>
+</header>
+<div class="card" id="card"></div>
+<div class="dock"><div class="prog" id="prog"></div><button class="btn play" id="pp" aria-label="Play"></button></div>
+<script type="module" src="map2.js?v=5"></script>
 </body>
 </html>
