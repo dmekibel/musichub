@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blue Note · MusicHub direction 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Archivo:wght@400;600&family=Noto+Music&display=swap" rel="stylesheet">
+<style>
+  /* Direction 3, Blue Note. Every moment is a record cover: one flat field of colour (the function),
+     giant condensed type that runs off the edge, one bold geometric shape (the chord itself).
+     After: Reid Miles's Blue Note covers (cropped condensed type, a single field, asymmetry),
+     Josef Müller-Brockmann's grid posters, Teenage Engineering's flat colour and plain geometry. */
+  :root { --field: #4a2fd0; --cream: #f1e9d8; --black: #0c0b0a; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--black); color: var(--cream); font: 15px/1.45 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow: hidden; }
+  .screen { height: 100dvh; min-height: 720px; display: grid; grid-template-rows: 64% 1fr; }
+  .cover { position: relative; background: var(--field); overflow: hidden; padding: calc(18px + env(safe-area-inset-top)) 22px 0; }
+  .cover::after { content: ""; position: absolute; inset: 0; opacity: .16; mix-blend-mode: multiply; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .top { position: relative; z-index: 2; display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+  .top span:last-child { font-weight: 400; opacity: .8; }
+  .lenses { position: relative; z-index: 2; display: flex; gap: 6px; margin-top: 14px; }
+  .lenses span { font-size: 13px; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(241,233,216,.45); }
+  .lenses .on { background: var(--cream); color: var(--field); border-color: var(--cream); font-weight: 600; }
+  .shape { position: absolute; right: -46px; top: 96px; width: 330px; height: 330px; z-index: 1; }
+  .big { position: absolute; left: 16px; bottom: -34px; z-index: 3; font: 400 250px/0.8 "League Gothic", sans-serif; letter-spacing: -2px; color: var(--cream); white-space: nowrap; }
+  .big .acc { font-family: "Noto Music"; font-size: .58em; vertical-align: .42em; margin: 0 -.02em 0 .03em; }
+  .big sup { font-size: .38em; vertical-align: 1.2em; }
+  .side { position: absolute; right: 18px; bottom: 26px; z-index: 3; writing-mode: vertical-rl; transform: rotate(180deg); font: 400 30px/1 "League Gothic", sans-serif; letter-spacing: .5px; color: var(--black); }
+
+  .below { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto 1fr auto; gap: 6px 20px; padding: 22px 22px calc(20px + env(safe-area-inset-bottom)); position: relative; }
+  .num { font: 400 128px/0.8 "League Gothic", sans-serif; color: transparent; -webkit-text-stroke: 1.4px var(--cream); grid-row: span 2; margin-top: 4px; }
+  .num small { display: block; font: 400 14px Archivo; -webkit-text-stroke: 0; color: rgba(241,233,216,.55); margin-top: 10px; letter-spacing: 0; }
+  .what { font: 400 40px/0.95 "League Gothic", sans-serif; letter-spacing: .3px; }
+  .what em { font-style: normal; color: #9d86ff; }
+  .story { font-size: 15.5px; color: rgba(241,233,216,.72); margin-top: 8px; }
+  .story b { color: var(--cream); font-weight: 600; display: block; font-size: 15px; margin-bottom: 2px; }
+  .track { grid-column: 1 / -1; align-self: end; margin-right: 96px; display: flex; gap: 4px; align-items: flex-end; height: 26px; }
+  .track i { flex: var(--n); height: 8px; background: rgba(241,233,216,.18); position: relative; }
+  .track i.done { background: var(--cream); }
+  .track i.part { background: linear-gradient(90deg, var(--cream) var(--p), rgba(241,233,216,.18) var(--p)); }
+  .track i span { position: absolute; left: 0; bottom: 12px; font-size: 11.5px; white-space: nowrap; color: rgba(241,233,216,.55); }
+  .play { position: absolute; right: 22px; bottom: calc(14px + env(safe-area-inset-bottom)); width: 74px; height: 74px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; }
+  .play svg { width: 26px; height: 26px; margin-left: 4px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <section class="cover">
+    <div class="top"><span>Bach · Prelude in C</span><span>bar 12 / 35</span></div>
+    <div class="lenses"><span>Journey</span><span class="on">Chords</span><span>Notes</span></div>
+    <svg class="shape" id="shape" viewBox="-160 -160 320 320"></svg>
+    <div class="big">C<span class="acc">♯</span><sup>°7</sup></div>
+    <div class="side">over G</div>
+  </section>
+  <section class="below">
+    <div class="num">12<small>of 35</small></div>
+    <div class="what"><em>Tension</em><br>toward D minor</div>
+    <p class="story"><b>The way back</b>The first notes from outside both keys arrive, and the bass starts its walk down to C.</p>
+    <div class="track">
+      <i class="done" style="--n:4"><span>Home</span></i>
+      <i class="done" style="--n:7"><span>To G</span></i>
+      <i class="part" style="--n:8;--p:12%"><span>The way back</span></i>
+      <i style="--n:4"></i>
+      <i style="--n:8"><span>The long wait</span></i>
+      <i style="--n:4"></i>
+    </div>
+    <div class="play"><svg viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z" fill="#4a2fd0"/></svg></div>
+  </section>
+</div>
+<script>
+// the chord as one bold shape: C#, E, G, Bb sit on the 12-note clock as a perfect square
+const NS = "http://www.w3.org/2000/svg", s = document.getElementById("shape");
+const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); s.appendChild(e); return e; };
+const R = 128, P = (pc) => [R * Math.sin(pc * Math.PI / 6), -R * Math.cos(pc * Math.PI / 6)];
+el("circle", { r: R, fill: "none", stroke: "#f1e9d8", "stroke-width": 1.2, opacity: .55 });
+el("polygon", { points: [1, 4, 7, 10].map((p) => P(p).join(",")).join(" "), fill: "#0c0b0a" });
+for (let pc = 0; pc < 12; pc++) { const [x, y] = P(pc); el("circle", { cx: x, cy: y, r: [1, 4, 7, 10].includes(pc) ? 7 : 3, fill: "#f1e9d8" }); }
+</script>
+</body>
+</html>

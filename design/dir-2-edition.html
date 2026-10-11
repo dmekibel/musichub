@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Edition · MusicHub direction 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Music&display=swap" rel="stylesheet">
+<style>
+  /* Direction 2, Edition. A scholarly edition you can hear: cream paper, engraved notation,
+     analysis set like a Henle Urtext, colour used as pigment ink, sparingly.
+     After: Henle and Bärenreiter Urtext editions, Edward Tufte's books (sidenotes, sparklines),
+     Farrow & Ball's colour cards (pigment names), Kinfolk and Aesop editorial layouts. */
+  :root { --paper: #f2ece0; --ink: #1d1a16; --soft: #6f675c; --rule: #d3c9b8;
+          --ochre: #b98222; --viridian: #2f7a64; --vermilion: #c2412b; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--paper); color: var(--ink); font: 18px/1.5 "EB Garamond", "Noto Music", Georgia, serif; -webkit-font-smoothing: antialiased; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .28 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .screen { min-height: 100dvh; padding: calc(26px + env(safe-area-inset-top)) 28px calc(28px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; }
+  .acc { font-family: "Noto Music"; font-size: .78em; margin: 0 .03em; }
+  .composer { color: var(--soft); font-size: 15px; letter-spacing: .02em; }
+  h1 { font-weight: 400; font-size: 46px; line-height: 1.02; letter-spacing: -.5px; margin-top: 4px; }
+  .work { font-style: italic; color: var(--soft); font-size: 16px; margin-top: 4px; }
+  .lenses { display: flex; gap: 22px; margin-top: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); font-size: 17px; color: var(--soft); }
+  .lenses .on { color: var(--ink); box-shadow: inset 0 -1.5px 0 var(--ink); padding-bottom: 9px; margin-bottom: -11px; }
+
+  figure { margin: 30px -28px 0; }
+  figure svg { width: 100%; height: auto; display: block; }
+  figcaption { font-style: italic; font-size: 14px; color: var(--soft); text-align: center; margin-top: 2px; }
+
+  .analysis { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: 26px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  .rn { font-size: 58px; line-height: .9; letter-spacing: -.5px; white-space: nowrap; }
+  .fig { display: inline-flex; flex-direction: column; font-size: .4em; line-height: .95; vertical-align: .55em; margin: 0 1px; text-align: center; }
+  .rn small { font-size: .62em; color: var(--soft); }
+  .what { text-align: right; font-size: 16px; line-height: 1.35; color: var(--soft); }
+  .what b { display: block; font-weight: 500; color: var(--ink); font-size: 18px; }
+  .ink { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; font-style: italic; color: var(--vermilion); }
+  .ink::before { content: ""; width: 22px; height: 2px; background: var(--vermilion); }
+
+  .note { font-size: 19px; line-height: 1.5; margin-top: 22px; }
+  .note i { font-style: italic; }
+
+  .piece { margin-top: auto; padding-top: 26px; }
+  .piece-head { display: flex; justify-content: space-between; font-size: 15px; color: var(--soft); }
+  .piece-head i { color: var(--ink); }
+  .piece svg { width: 100%; height: auto; display: block; margin-top: 4px; overflow: visible; }
+  .listen { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; }
+  .btn { display: inline-flex; align-items: center; gap: 12px; background: var(--ink); color: var(--paper); border-radius: 999px; padding: 13px 26px 13px 20px; font-size: 20px; }
+  .btn svg { width: 16px; height: 16px; }
+  .tempo { color: var(--soft); font-size: 16px; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <header>
+  <p class="composer">Johann Sebastian Bach</p>
+  <h1>Prelude in C major</h1>
+  <p class="work">The Well-Tempered Clavier, Book I · 1722</p>
+  </header>
+  <div class="lenses"><span class="on">Score</span><span>Journey</span><span>Chords</span><span>Notes</span></div>
+
+  <section>
+  <figure>
+    <svg id="staff" viewBox="0 0 390 196"></svg>
+    <figcaption>Bar 12 as one chord, and where it goes in bar 13</figcaption>
+  </figure>
+
+  <div class="analysis">
+    <div class="rn">vii°<span class="fig"><span>4</span><span>3</span></span><small>/</small>ii</div>
+    <div class="what"><b>C<span class="acc">♯</span> diminished seventh</b>over a G in the bass<br><span class="ink">tension</span></div>
+  </div>
+
+  <p class="note"><i>The way back.</i> A C<span class="acc">♯</span> and a B<span class="acc">♭</span> arrive, the first notes from outside both keys. They lean toward D minor, and the bass begins its slow walk down to C.</p>
+
+  <div class="piece">
+    <div class="piece-head"><span><i>The whole piece</i></span><span>bar 12 of 35</span></div>
+    <svg id="spark" viewBox="0 0 334 64"></svg>
+    <div class="listen">
+      <span class="btn"><svg viewBox="0 0 16 16"><path d="M3 1.5v13l11-6.5z" fill="currentColor"/></svg>Listen</span>
+      <span class="tempo">♩ = 66 · two minutes</span>
+    </div>
+  </div>
+</div>
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a, p, txt) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; p && p.appendChild(e); return e; };
+const s = document.getElementById("staff");
+const INK = "#1d1a16", SOFT = "#a39886";
+// grand staff: treble lines y = 40..80, bass lines y = 120..160 (10px per space, 5px per step)
+const X0 = 26, X1 = 376;
+for (let i = 0; i < 5; i++) {
+  el("line", { x1: X0, x2: X1, y1: 40 + i * 10, y2: 40 + i * 10, stroke: INK, "stroke-width": .9 }, s);
+  el("line", { x1: X0, x2: X1, y1: 120 + i * 10, y2: 120 + i * 10, stroke: INK, "stroke-width": .9 }, s);
+}
+el("line", { x1: X0, x2: X0, y1: 40, y2: 160, stroke: INK, "stroke-width": 1.2 }, s);
+el("line", { x1: 222, x2: 222, y1: 40, y2: 160, stroke: INK, "stroke-width": .9 }, s);
+el("line", { x1: X1, x2: X1, y1: 40, y2: 160, stroke: INK, "stroke-width": .9 }, s);
+// clefs (Noto Music)
+el("text", { x: 22, y: 81, "font-family": "Noto Music", "font-size": 52, fill: INK }, s, "𝄞");
+el("text", { x: 24, y: 151, "font-family": "Noto Music", "font-size": 40, fill: INK }, s, "𝄢");
+// bar numbers
+el("text", { x: 120, y: 24, "font-family": "EB Garamond", "font-style": "italic", "font-size": 15, fill: SOFT, "text-anchor": "middle" }, s, "12");
+el("text", { x: 300, y: 24, "font-family": "EB Garamond", "font-style": "italic", "font-size": 15, fill: SOFT, "text-anchor": "middle" }, s, "13");
+
+function whole(x, y, color) {
+  const g = el("g", { transform: `translate(${x},${y})` }, s);
+  el("ellipse", { rx: 7, ry: 4.7, fill: color }, g);
+  el("ellipse", { rx: 4.3, ry: 2.5, fill: "#f2ece0", transform: "rotate(-40)" }, g);
+}
+function acc(x, y, glyph, color) { el("text", { x, y: y + 5, "font-family": "Noto Music", "font-size": 20, fill: color, "text-anchor": "middle" }, s, glyph); }
+// bar 12: G3 Bb3 | E4 G4 C#5
+whole(132, 80, INK); whole(132, 70, INK); whole(132, 55, INK); acc(114, 55, "♯", INK);
+whole(132, 125, INK); whole(132, 115, INK); acc(114, 115, "♭", INK);
+// bar 13 (ghost): F3 A3 | D4 A4 D5
+whole(300, 85, SOFT); whole(300, 65, SOFT); whole(300, 50, SOFT);
+whole(300, 130, SOFT); whole(300, 120, SOFT);
+// the pull: C# rises to D (one step), Bb falls to A
+el("path", { d: "M141,53 C200,40 250,44 290,49", fill: "none", stroke: "#c2412b", "stroke-width": 1.2, "stroke-dasharray": "3 3" }, s);
+el("path", { d: "M141,114 C200,108 250,112 290,119", fill: "none", stroke: "#c2412b", "stroke-width": 1.2, "stroke-dasharray": "3 3" }, s);
+el("text", { x: 214, y: 186, "font-family": "EB Garamond, Noto Music", "font-style": "italic", "font-size": 14, fill: "#c2412b", "text-anchor": "middle" }, s, "C♯ rises to D, B♭ falls to A");
+
+// whole piece: tension line + a tick per bar in pigment ink
+const FN = [["T",.14],["S",.48],["D",.84],["T",.14],["S",.52],["D",.97],["T",.22],["S",.61],["S",.56],["D",.97],["T",.22],["D",1],["S",.44],["D",.93],["T",.14],["S",.53],["S",.48],["D",.84],["T",.14],["D",.95],["S",.53],["D",1],["D",.93],["D",.84],["D",.74],["D",.8],["D",.84],["D",1],["D",.74],["D",.8],["D",.84],["T",.29],["S",.44],["D",.96],["T",.14]];
+const COL = { T: "#b98222", S: "#2f7a64", D: "#c2412b" };
+const sp = document.getElementById("spark"), W = 334, n = FN.length, NOW = 11;
+const xs = (i) => (i + .5) * W / n, ys = (v) => 40 - v * 34;
+let d = ""; FN.forEach(([, v], i) => (d += (i ? " L" : "M") + xs(i).toFixed(1) + "," + ys(v).toFixed(1)));
+el("path", { d, fill: "none", stroke: "#1d1a16", "stroke-width": 1, "vector-effect": "non-scaling-stroke", opacity: .8 }, sp);
+FN.forEach(([fn], i) => el("rect", { x: xs(i) - 1, y: 50, width: 2, height: i === NOW ? 12 : 8, fill: COL[fn], opacity: i <= NOW ? 1 : .45 }, sp));
+el("circle", { cx: xs(NOW), cy: ys(FN[NOW][1]), r: 3.2, fill: "#c2412b" }, sp);
+</script>
+</body>
+</html>

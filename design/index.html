@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MusicHub · four directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0d0c0b; --ink: #efe9df; --soft: #9a9286; --line: #2a2622; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font: 15px/1.55 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; padding: calc(28px + env(safe-area-inset-top)) 20px 60px; }
+  .wrap { max-width: 1240px; margin: 0 auto; }
+  h1 { font: 400 clamp(40px, 7vw, 64px)/1 "Instrument Serif", serif; letter-spacing: -.5px; }
+  .lede { color: var(--soft); max-width: 640px; margin-top: 12px; font-size: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 34px 26px; margin-top: 38px; }
+  .dir { display: flex; flex-direction: column; }
+  .frame { position: relative; width: 264px; height: 574px; border-radius: 34px; overflow: hidden; box-shadow: 0 0 0 1px var(--line), 0 24px 60px rgba(0,0,0,.5); margin: 0 auto; }
+  .frame iframe { width: 440px; height: 956px; border: 0; transform: scale(.6); transform-origin: 0 0; pointer-events: none; }
+  .frame a { position: absolute; inset: 0; }
+  .rank { display: inline-block; margin-top: 18px; font-size: 13px; color: var(--soft); }
+  h2 { font: 400 32px/1.05 "Instrument Serif", serif; margin-top: 4px; }
+  .idea { margin-top: 6px; }
+  .refs { margin-top: 8px; color: var(--soft); font-size: 13.5px; }
+  .verdict { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 14px; color: #cfc7bb; }
+  .open { margin-top: 12px; color: var(--ink); font-size: 14px; text-decoration: none; border-bottom: 1px solid var(--soft); align-self: flex-start; }
+  .rec { margin-top: 46px; padding: 24px; border-radius: 22px; background: #171512; box-shadow: inset 0 0 0 1px var(--line); max-width: 820px; }
+  .rec h3 { font: 400 28px "Instrument Serif", serif; }
+  .rec p { margin-top: 8px; color: #d6cec2; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Four directions</h1>
+  <p class="lede">The same moment in all four: bar 12 of Bach's Prelude in C, a C♯ diminished seventh over G. Real data, real chord, real story. Tap one to open it full screen. These choose the look; the deeper visualizations come next.</p>
+
+  <div class="grid">
+    <div class="dir">
+      <div class="frame"><iframe src="dir-1-nocturne.html" loading="lazy" title="Nocturne"></iframe><a href="dir-1-nocturne.html" aria-label="Open Nocturne"></a></div>
+      <span class="rank">1 · my pick for the player</span>
+      <h2>Nocturne</h2>
+      <p class="idea">The music is the interface. Black, and the room glows the color of the harmony; the chord hangs in the dark as points of light.</p>
+      <p class="refs">After Apple Music's lyric view, Brian Eno's Bloom, Apple Watch faces, glowing-piano videos.</p>
+      <p class="verdict">Immersive, calm, full screen, works for anyone. The glow changing with home, away and tension is the signature. Risk: dark apps can look generic without that signature.</p>
+      <a class="open" href="dir-1-nocturne.html">Open full screen</a>
+    </div>
+    <div class="dir">
+      <div class="frame"><iframe src="dir-2-edition.html" loading="lazy" title="Edition"></iframe><a href="dir-2-edition.html" aria-label="Open Edition"></a></div>
+      <span class="rank">2 · the most "expensive"</span>
+      <h2>Edition</h2>
+      <p class="idea">A scholarly edition you can hear. Cream paper, real engraved notation, analysis set like an Urtext, color only as pigment ink.</p>
+      <p class="refs">After Henle and Bärenreiter editions, Tufte's books, Farrow &amp; Ball cards, Aesop and Kinfolk.</p>
+      <p class="verdict">Instant credibility with musicians; shows how the voices move (C♯ rises to D). Risk: notation can scare people who don't read music.</p>
+      <a class="open" href="dir-2-edition.html">Open full screen</a>
+    </div>
+    <div class="dir">
+      <div class="frame"><iframe src="dir-4-kandinsky.html" loading="lazy" title="Kandinsky"></iframe><a href="dir-4-kandinsky.html" aria-label="Open Kandinsky"></a></div>
+      <span class="rank">3 · the most original</span>
+      <h2>Kandinsky</h2>
+      <p class="idea">The piece paints itself. Every bar takes its place on a wheel (shape = function, size = tension) and the bass spirals in toward home.</p>
+      <p class="refs">After Kandinsky's Composition VIII and his Bauhaus color-shape test, Fischinger, Fantasia.</p>
+      <p class="verdict">The finished painting is a poster and the piece's chip in the archive. Risk: harder to read moment to moment; best as the ending, not the player.</p>
+      <a class="open" href="dir-4-kandinsky.html">Open full screen</a>
+    </div>
+    <div class="dir">
+      <div class="frame"><iframe src="dir-3-bluenote.html" loading="lazy" title="Blue Note"></iframe><a href="dir-3-bluenote.html" aria-label="Open Blue Note"></a></div>
+      <span class="rank">4 · the boldest</span>
+      <h2>Blue Note</h2>
+      <p class="idea">Every moment is a record cover: one flat field of color, giant type off the edge, the chord as one bold shape.</p>
+      <p class="refs">After Reid Miles's Blue Note covers, Müller-Brockmann's grids, Teenage Engineering.</p>
+      <p class="verdict">Striking in a screenshot and great for jazz. Risk: loud; a full-screen color that flips every bar could tire people over two minutes.</p>
+      <a class="open" href="dir-3-bluenote.html">Open full screen</a>
+    </div>
+  </div>
+
+  <div class="rec">
+    <h3>My recommendation</h3>
+    <p>One system, not four: Nocturne as the look. Edition's real notation becomes a "Score" lens inside it (cream ink on black). Kandinsky's wheel becomes what you get when a piece ends: its poster, and its chip in the archive wall.</p>
+  </div>
+</div>
+</body>
+</html>

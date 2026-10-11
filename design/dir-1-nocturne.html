@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nocturne · MusicHub direction 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500&family=Noto+Music&display=swap" rel="stylesheet">
+<style>
+  /* Direction 1, Nocturne. The music is the interface; the room glows the color of the harmony.
+     After: Apple Music's lyric view (one huge line, the rest fades), Brian Eno's Bloom (points of
+     light on black), Apple Watch faces (light on true black), the "glowing piano" YouTube videos. */
+  :root { --tension: #a77dff; --home: #ffb757; --away: #7fdc9a; --ink: #f4efe6; --dim: rgba(244,239,230,.42); }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; background: #030303; color: var(--ink); font: 15px/1.5 Inter, "Noto Music", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow: hidden; }
+  .screen { position: relative; height: 100dvh; min-height: 720px; display: grid; grid-template-rows: auto auto 1fr auto auto; padding: calc(18px + env(safe-area-inset-top)) 24px calc(22px + env(safe-area-inset-bottom)); isolation: isolate; }
+  .glow { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(60% 34% at 50% 34%, color-mix(in srgb, var(--tension) 38%, transparent), transparent 70%),
+      radial-gradient(90% 50% at 50% 30%, color-mix(in srgb, var(--tension) 14%, transparent), transparent 75%),
+      radial-gradient(70% 30% at 50% 108%, color-mix(in srgb, var(--home) 10%, transparent), transparent 70%); }
+  .grain { position: absolute; inset: 0; z-index: -1; opacity: .07; mix-blend-mode: overlay; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .meta { display: flex; justify-content: space-between; align-items: baseline; color: var(--dim); font-size: 13px; }
+  .meta b { color: var(--ink); font-weight: 500; }
+  .lenses { display: flex; justify-content: center; gap: 22px; margin-top: 18px; font-size: 14px; color: rgba(244,239,230,.38); }
+  .lenses span { position: relative; padding-bottom: 6px; }
+  .lenses .on { color: var(--ink); }
+  .lenses .on::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--ink); }
+
+  .hero { display: grid; place-items: center; position: relative; }
+  .hero svg { width: min(100%, 360px); height: auto; overflow: visible; }
+
+  .now { text-align: center; margin-top: -6px; }
+  .chord { font: 400 112px/0.9 "Instrument Serif", serif; letter-spacing: -2px; }
+  .chord sup { font-size: .42em; vertical-align: .95em; letter-spacing: 0; margin-left: 2px; }
+  .acc { font-family: "Noto Music"; font-size: .5em; vertical-align: .62em; margin: 0 .02em 0 .04em; }
+  .over { font: 400 26px "Instrument Serif", serif; color: var(--dim); margin-left: 6px; }
+  .says { margin-top: 14px; font-size: 16px; color: rgba(244,239,230,.78); }
+  .says em { font-style: normal; color: var(--tension); }
+
+  .story { margin: 26px auto 0; max-width: 340px; text-align: center; color: var(--dim); font-size: 14px; }
+  .story strong { display: block; font: 400 22px "Instrument Serif", serif; color: var(--ink); margin-bottom: 2px; }
+
+  .piece { margin-top: 26px; }
+  .spark { width: 100%; height: 34px; display: block; overflow: visible; }
+  .bars { display: flex; gap: 3px; margin-top: 8px; }
+  .bars i { flex: 1; height: 4px; border-radius: 2px; background: var(--c); opacity: .22; }
+  .bars i.done { opacity: .62; }
+  .bars i.now { opacity: 1; box-shadow: 0 0 12px var(--c); height: 6px; margin-top: -1px; }
+  .sections { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: rgba(244,239,230,.34); }
+  .transport { display: flex; align-items: center; justify-content: center; gap: 34px; margin-top: 18px; color: var(--dim); font-size: 13px; }
+  .play { width: 66px; height: 66px; border-radius: 50%; border: 1px solid rgba(244,239,230,.55); display: grid; place-items: center; box-shadow: 0 0 40px color-mix(in srgb, var(--tension) 25%, transparent); }
+  .play svg { width: 22px; height: 22px; margin-left: 3px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="glow"></div><div class="grain"></div>
+  <div class="meta"><span><b>Prelude in C</b> · Bach</span><span>bar 12 of 35</span></div>
+  <div class="lenses"><span>Journey</span><span class="on">Chords</span><span>Notes</span></div>
+
+  <div class="hero"><svg id="clock" viewBox="-180 -180 360 360"></svg></div>
+
+  <div class="now">
+    <div><span class="chord">C<span class="acc">♯</span><sup>°7</sup></span><span class="over">over G</span></div>
+    <p class="says"><em>Tension.</em> It leans toward D minor.</p>
+    <p class="story"><strong>The way back</strong>The first notes from outside both keys appear, and the bass starts walking down to C.</p>
+  </div>
+
+  <div class="piece">
+    <svg class="spark" id="spark" viewBox="0 0 350 34" preserveAspectRatio="none"></svg>
+    <div class="bars" id="bars"></div>
+    <div class="sections"><span>Home</span><span>To G</span><span>The way back</span><span>The long wait</span><span>Home</span></div>
+    <div class="transport"><span>♩ 66</span><div class="play"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" fill="#f4efe6"/></svg></div><span>1:58</span></div>
+  </div>
+</div>
+<script>
+const FN = [["T",.14],["S",.48],["D",.84],["T",.14],["S",.52],["D",.97],["T",.22],["S",.61],["S",.56],["D",.97],["T",.22],["D",1],["S",.44],["D",.93],["T",.14],["S",.53],["S",.48],["D",.84],["T",.14],["D",.95],["S",.53],["D",1],["D",.93],["D",.84],["D",.74],["D",.8],["D",.84],["D",1],["D",.74],["D",.8],["D",.84],["T",.29],["S",.44],["D",.96],["T",.14]];
+const COL = { T: "var(--home)", S: "var(--away)", D: "var(--tension)" };
+const NOW = 11;
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p && p.appendChild(e); return e; };
+
+// clock: 12 points of light; the chord C#–E–G–Bb is a perfect square (a diminished seventh)
+const svg = document.getElementById("clock");
+const defs = el("defs", {}, svg);
+const f = el("filter", { id: "bloom", x: "-2", y: "-2", width: "5", height: "5" }, defs); el("feGaussianBlur", { stdDeviation: "6" }, f);
+const g2 = el("radialGradient", { id: "star" }, defs);
+el("stop", { offset: "0", "stop-color": "#fff" }, g2); el("stop", { offset: ".35", "stop-color": "#e9dcff" }, g2); el("stop", { offset: "1", "stop-color": "#a77dff", "stop-opacity": "0" }, g2);
+const R = 128, names = ["C","C♯","D","E♭","E","F","F♯","G","A♭","A","B♭","B"];
+const P = (pc, r = R) => [r * Math.sin(pc * Math.PI / 6), -r * Math.cos(pc * Math.PI / 6)];
+el("circle", { r: R, fill: "none", stroke: "rgba(244,239,230,.08)" }, svg);
+const chord = [1, 4, 7, 10], bass = 7;
+// ghost of the previous chord (G)
+el("polygon", { points: [7, 11, 2].map((p) => P(p).join(",")).join(" "), fill: "none", stroke: "rgba(244,239,230,.16)", "stroke-dasharray": "2 5" }, svg);
+// the square
+const pts = chord.map((p) => P(p).join(",")).join(" ");
+el("polygon", { points: pts, fill: "rgba(167,125,255,.10)", stroke: "#cdb4ff", "stroke-width": 1.2, filter: "url(#bloom)", opacity: .9 }, svg);
+el("polygon", { points: pts, fill: "none", stroke: "#efe6ff", "stroke-width": 1 }, svg);
+for (let pc = 0; pc < 12; pc++) {
+  const on = chord.includes(pc);
+  const [x, y] = P(pc);
+  if (on) {
+    el("circle", { cx: x, cy: y, r: 16, fill: "url(#star)", opacity: .9 }, svg);
+    el("circle", { cx: x, cy: y, r: 3.4, fill: "#fff" }, svg);
+    if (pc === bass) el("circle", { cx: x, cy: y, r: 11, fill: "none", stroke: "rgba(255,255,255,.55)", "stroke-width": 1 }, svg);
+  } else el("circle", { cx: x, cy: y, r: 1.4, fill: "rgba(244,239,230,.32)" }, svg);
+  const [lx, ly] = P(pc, R + 28);
+  const t = el("text", { x: lx, y: ly + 5, "text-anchor": "middle", "font-family": "Inter, Noto Music", "font-size": on ? 14 : 11.5, fill: on ? "#f4efe6" : "rgba(244,239,230,.3)" }, svg);
+  t.textContent = names[pc].replace("D♭", "C♯");
+}
+
+// tension sparkline + bars
+const sp = document.getElementById("spark");
+const W = 350, H = 34, xs = (i) => (i + .5) * W / FN.length, ys = (v) => H - 2 - v * (H - 6);
+let d = "";
+FN.forEach(([, v], i) => { d += (i ? " L" : "M") + xs(i).toFixed(1) + "," + ys(v).toFixed(1); });
+el("path", { d, fill: "none", stroke: "rgba(244,239,230,.22)", "stroke-width": 1, "vector-effect": "non-scaling-stroke" }, sp);
+let dd = "";
+FN.slice(0, NOW + 1).forEach(([, v], i) => { dd += (i ? " L" : "M") + xs(i).toFixed(1) + "," + ys(v).toFixed(1); });
+el("path", { d: dd, fill: "none", stroke: "rgba(244,239,230,.75)", "stroke-width": 1.4, "vector-effect": "non-scaling-stroke" }, sp);
+const bars = document.getElementById("bars");
+FN.forEach(([fn], i) => { const b = document.createElement("i"); b.style.setProperty("--c", COL[fn]); if (i < NOW) b.className = "done"; if (i === NOW) b.className = "now"; bars.appendChild(b); });
+</script>
+</body>
+</html>

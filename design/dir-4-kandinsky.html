@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kandinsky · MusicHub direction 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Noto+Music&display=swap" rel="stylesheet">
+<style>
+  /* Direction 4, Kandinsky. The piece paints itself while it plays; when it ends, the painting is
+     its poster (and its chip in the archive). Bauhaus primaries and shapes carry the function:
+     home = yellow circle, away = blue triangle, tension = red square.
+     After: Kandinsky's Composition VIII and his 1923 Bauhaus colour-shape questionnaire, Oskar
+     Fischinger's visual-music films, Fantasia's Toccata and Fugue, Bauhaus posters. */
+  :root { --canvas: #eee6d6; --ink: #161514; --soft: #6c655b; --yellow: #e7b31f; --blue: #2c55a8; --red: #cf3a26; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--canvas); color: var(--ink); font: 15px/1.45 Jost, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow: hidden; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .55; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .33 0 0 0 0 .22 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .screen { height: 100dvh; min-height: 720px; display: grid; grid-template-rows: auto 1fr auto; padding: calc(20px + env(safe-area-inset-top)) 24px calc(22px + env(safe-area-inset-bottom)); }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; }
+  h1 { font-weight: 500; font-size: 32px; line-height: 1; letter-spacing: -.3px; }
+  .sub { color: var(--soft); font-size: 14px; margin-top: 6px; }
+  .count { font-size: 14px; color: var(--soft); text-align: right; }
+  .count b { display: block; font-weight: 500; font-size: 30px; line-height: 1; color: var(--ink); }
+  .art { position: relative; display: grid; place-items: center; }
+  .art { margin: 0 -24px; }
+  .art svg { width: 100%; height: auto; max-height: 100%; }
+  .foot { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: center; }
+  .chord { font-weight: 500; font-size: 24px; line-height: 1.15; }
+  .chord span { color: var(--red); }
+  .chord .acc { font-family: "Noto Music"; color: inherit; font-size: .8em; }
+  .story { grid-column: 1; color: var(--soft); font-size: 14.5px; }
+  .play { grid-row: 1 / span 2; grid-column: 2; width: 64px; height: 64px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; }
+  .play svg { width: 22px; height: 22px; margin-left: 3px; }
+  .legend { grid-column: 1 / -1; display: flex; gap: 18px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(22,21,20,.15); font-size: 13px; color: var(--soft); }
+  .legend i { display: inline-block; width: 11px; height: 11px; margin-right: 6px; vertical-align: -1px; }
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="head">
+    <div><h1>Prelude in C</h1><p class="sub">Bach · 1722 · the piece paints itself as it plays</p></div>
+    <div class="count"><b>12</b>of 35</div>
+  </div>
+  <div class="art"><svg id="art" viewBox="0 0 392 510"></svg></div>
+  <div class="foot">
+    <p class="chord">C<span class="acc">♯</span>°7 over G · <span>tension</span></p>
+    <p class="story">The first notes from outside both keys. It leans toward D minor.</p>
+    <div class="play"><svg viewBox="0 0 24 24"><path d="M6.5 4v16l13-8z" fill="#eee6d6"/></svg></div>
+    <div class="legend"><span><i style="background:var(--yellow);border-radius:50%"></i>home</span><span><i style="background:var(--blue);clip-path:polygon(50% 0,100% 100%,0 100%)"></i>away</span><span><i style="background:var(--red)"></i>tension</span></div>
+  </div>
+</div>
+<script>
+const FN = [["T",.14],["S",.48],["D",.84],["T",.14],["S",.52],["D",.97],["T",.22],["S",.61],["S",.56],["D",.97],["T",.22],["D",1],["S",.44],["D",.93],["T",.14],["S",.53],["S",.48],["D",.84],["T",.14],["D",.95],["S",.53],["D",1],["D",.93],["D",.84],["D",.74],["D",.8],["D",.84],["D",1],["D",.74],["D",.8],["D",.84],["T",.29],["S",.44],["D",.96],["T",.14]];
+// lowest note of each bar (MIDI): Bach's bass walks down two octaves, from middle C to low C
+const BASS = [60,60,59,60,60,60,59,59,57,50,55,55,53,53,52,52,50,43,48,48,41,42,44,43,43,43,43,43,43,43,43,36,36,36,36];
+const NOW = 11, N = 35, COL = { T: "#e7b31f", S: "#2c55a8", D: "#cf3a26" }, INK = "#161514";
+const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("art");
+const el = (t, a, p = svg) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const CX = 196, CY = 236, RING = 172;
+const ang = (i) => -Math.PI / 2 + (i / N) * Math.PI * 2;
+const at = (i, r) => [CX + r * Math.cos(ang(i)), CY + r * Math.sin(ang(i))];
+
+// home: a warm halo at the centre, and Kandinsky's concentric rings
+el("circle", { cx: CX, cy: CY, r: 118, fill: COL.T, opacity: .14 });
+[58, 96, 140].forEach((r, k) => el("circle", { cx: CX, cy: CY, r, fill: "none", stroke: INK, "stroke-width": .7, opacity: .18 + k * .04 }));
+
+// the bass: radius follows pitch, so walking down two octaves spirals inward to home
+const rB = (m) => 34 + (m - 36) * 4.6;
+let road = "", walked = "";
+BASS.forEach((m, i) => { const [x, y] = at(i, rB(m)); road += (i ? " L" : "M") + x.toFixed(1) + "," + y.toFixed(1); if (i <= NOW) walked += (i ? " L" : "M") + x.toFixed(1) + "," + y.toFixed(1); });
+el("path", { d: road, fill: "none", stroke: INK, "stroke-width": 1.2, "stroke-dasharray": "1 5", "stroke-linecap": "round", opacity: .55 });
+el("path", { d: walked, fill: "none", stroke: INK, "stroke-width": 5, "stroke-linejoin": "round", "stroke-linecap": "round" });
+
+// every bar on the outer ring: shape = function, size = tension; ahead = outlines
+function shape(fn, x, y, r, played, rot) {
+  const a = played ? { fill: COL[fn] } : { fill: "none", stroke: INK, "stroke-width": 1, opacity: .4 };
+  if (fn === "T") return el("circle", { cx: x, cy: y, r, ...a });
+  if (fn === "S") return el("polygon", { points: `${x},${y - r * 1.1} ${x + r},${y + r * .75} ${x - r},${y + r * .75}`, ...a });
+  return el("rect", { x: x - r * .82, y: y - r * .82, width: r * 1.64, height: r * 1.64, transform: `rotate(${rot} ${x} ${y})`, ...a });
+}
+FN.forEach(([fn, v], i) => { const [x, y] = at(i, RING); shape(fn, x, y, 5 + v * 9, i <= NOW, i * 10.3); });
+// spoke to now
+const [nx, ny] = at(NOW, RING);
+el("circle", { cx: nx, cy: ny, r: 19, fill: "none", stroke: INK, "stroke-width": 1.2 });
+
+// the chord now, large at the centre: C#, E, G, Bb make a square on the 12-note clock
+const R = 44, corner = (pc) => [CX + R * Math.sin(pc * Math.PI / 6), CY - R * Math.cos(pc * Math.PI / 6)];
+el("polygon", { points: [1, 4, 7, 10].map((pc) => corner(pc).join(",")).join(" "), fill: COL.D });
+[[1, "#2c55a8"], [4, "#e7b31f"], [7, INK], [10, "#eee6d6"]].forEach(([pc, c]) => { const [x, y] = corner(pc); el("circle", { cx: x, cy: y, r: 6.5, fill: c, stroke: INK, "stroke-width": 1.4 }); });
+
+// the same piece in a line underneath (small multiples): left to right, the 35 bars
+const y0 = 470, x0 = 12, step = (392 - 24) / N;
+FN.forEach(([fn, v], i) => shape(fn, x0 + step * (i + .5), y0, 2.6 + v * 3.2, i <= NOW, 0));
+el("line", { x1: x0 + step * (NOW + .5) - 6, x2: x0 + step * (NOW + .5) + 6, y1: y0 + 13, y2: y0 + 13, stroke: INK, "stroke-width": 2 });
+[["home", 1], ["to G", 5], ["the way back", 12], ["the long wait", 24], ["home", 32]].forEach(([t, b]) => {
+  const e = el("text", { x: x0 + step * (b - 1), y: y0 + 32, "font-family": "Jost", "font-size": 11, fill: "#6c655b" }); e.textContent = t; });
+</script>
+</body>
+</html>
