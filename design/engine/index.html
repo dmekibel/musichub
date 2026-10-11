@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3a3e6a">
+<title>Harmony</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #3a3e6a; --ink: #f6f1e7; --soft: rgba(246,241,231,.66); --faint: rgba(246,241,231,.34); --hair: rgba(246,241,231,.13); --glass: rgba(246,241,231,.07); --card: rgba(246,241,231,.06);
+          --T: #f2c14e; --S: #46b3a9; --D: #e8607a; }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: linear-gradient(#3d4173, #33365f 60%, #2f3258); background-attachment: fixed; color: var(--ink); font: 400 15px/1.4 Archivo, system-ui, sans-serif; -webkit-font-smoothing: antialiased; padding-bottom: calc(112px + env(safe-area-inset-bottom)); min-height: 100vh; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  header { padding: calc(14px + env(safe-area-inset-top)) 20px 0; }
+  .row1 { display: flex; justify-content: space-between; align-items: center; }
+  h1 { font: 800 40px/0.9 Archivo; font-stretch: 62%; letter-spacing: -0.02em; }
+  .demo { height: 32px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--soft); background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); }
+  .demo.on { color: #2d2f55; background: var(--ink); }
+  .keys { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 12px -20px 0; padding: 0 20px; }
+  .keys::-webkit-scrollbar { display: none; }
+  .keys button { flex: none; min-width: 42px; height: 34px; padding: 0 10px; border-radius: 10px; font-size: 14px; font-weight: 750; color: var(--soft); }
+  .keys button.on { background: var(--glass); color: var(--ink); box-shadow: inset 0 0 0 1px var(--hair); }
+  .keys .lab { font-size: 12px; font-weight: 650; color: var(--faint); align-self: center; margin-right: 2px; }
+  #ring { display: block; width: 100%; height: auto; margin-top: 4px; }
+  .bub text { font-family: Archivo; }
+  .chip rect { transition: fill .2s; }
+  .panel { padding: 0 20px; }
+  .sel { display: flex; align-items: center; gap: 12px; }
+  .sel .nm { font: 800 56px/0.86 Archivo; font-stretch: 62%; letter-spacing: -0.02em; }
+  .sel .job { font-size: 13px; font-weight: 800; padding: 4px 10px; border-radius: 999px; color: #2d2f55; }
+  .sel .hear { margin-left: auto; width: 44px; height: 44px; border-radius: 50%; background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); display: grid; place-items: center; }
+  .sel .hear svg { width: 18px; height: 18px; }
+  .explain { margin-top: 8px; font-size: 14.5px; color: var(--soft); }
+  .tabs { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 14px; padding: 3px; border-radius: 12px; background: var(--card); box-shadow: inset 0 0 0 1px var(--hair); }
+  .tabs button { position: relative; z-index: 1; height: 36px; font-size: 14px; font-weight: 750; color: var(--soft); transition: color .25s; }
+  .tabs button.on { color: #2d2f55; }
+  .tabs i { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / 4); border-radius: 9px; background: var(--ink); transition: transform .4s cubic-bezier(.3,.9,.2,1); }
+  .list { margin-top: 10px; display: grid; gap: 8px; }
+  .opt { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 1px var(--hair); text-align: left; width: 100%; }
+  .opt:active { background: var(--glass); }
+  .opt .bar { width: 4px; align-self: stretch; border-radius: 2px; flex: none; }
+  .opt .txt { flex: 1; min-width: 0; }
+  .opt .t { font: 800 22px/1 Archivo; font-stretch: 70%; letter-spacing: -0.01em; }
+  .opt .t small { font: 700 13px Archivo; color: var(--soft); margin-left: 6px; letter-spacing: 0; font-stretch: 100%; }
+  .opt .w { font-size: 13.5px; color: var(--soft); margin-top: 3px; }
+  .opt .meta { font-size: 12px; color: var(--faint); margin-top: 3px; }
+  .opt .add { width: 36px; height: 36px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 22px; font-weight: 500; color: var(--ink); background: var(--glass); }
+  .note { font-size: 12px; color: var(--faint); margin-top: 10px; }
+  .dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: rgba(44,46,86,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 -1px 0 var(--hair); display: flex; align-items: center; gap: 12px; }
+  .prog { flex: 1; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  .prog::-webkit-scrollbar { display: none; }
+  .pc { flex: none; height: 48px; min-width: 52px; padding: 0 12px; border-radius: 12px; font: 800 18px Archivo; font-stretch: 75%; color: #2d2f55; display: grid; place-items: center; position: relative; }
+  .pc.sel2 { box-shadow: 0 0 0 2px var(--ink); }
+  .pc.now { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+  .pc .x { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%; background: #2d2f55; color: var(--ink); font: 700 12px/18px Archivo; display: none; }
+  .pc.sel2 .x { display: block; }
+  .pp { width: 52px; height: 52px; border-radius: 50%; background: var(--ink); color: #2d2f55; display: grid; place-items: center; flex: none; }
+  .pp svg { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="row1"><h1>Harmony</h1><button class="demo" id="demo">▶ Bach on the ring</button></div>
+  <div class="keys" id="keys"></div>
+</header>
+<svg id="ring" viewBox="0 0 400 330"></svg>
+<section class="panel">
+  <div class="sel"><div class="nm" id="nm"></div><span class="job" id="job"></span><button class="hear" id="hear" aria-label="Hear"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" fill="currentColor"/></svg></button></div>
+  <p class="explain" id="explain"></p>
+  <div class="tabs" id="tabs"><i></i><button data-t="approach" class="on">Approach</button><button data-t="swap">Swap</button><button data-t="spice">Spice</button><button data-t="next">Next</button></div>
+  <div class="list" id="list"></div>
+  <p class="note">Rules from harmony theory (Barry Harris, Lendvai, jazz practice). "Next" is a rule of thumb until the archive learns it from real songs.</p>
+</section>
+<div class="dock"><div class="prog" id="prog"></div><button class="pp" id="pp" aria-label="Play the progression"></button></div>
+<script type="module" src="face.js?v=2"></script>
+</body>
+</html>
