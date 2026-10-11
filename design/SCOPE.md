@@ -5,6 +5,8 @@ Hear any piece more deeply, travel through music history and world music, learn 
 step by step, and play with the deepest systems (mDecks-level harmony maps, Barry Harris).
 Wikipedia + Spotify + Duolingo + mDecks + Radio Garden, curated, with one design language.
 
+Research behind the views: `RESEARCH-VISUALIZATION.md` (mDecks in depth, 26 systems, ten ranked views).
+
 How this list was made: David's own invention habits (DAVID-MODEL §3) run across all of music, then
 curated (P22: the best features, not the most). Tiers: **1** = version 1 can't be the product without it,
 **2** = next, **3** = later. Design comes after this list, not before.
@@ -46,7 +48,7 @@ curated (P22: the best features, not the most). Tiers: **1** = version 1 can't b
 | Feature | Tier |
 |---|---|
 | Full-screen Player for any piece; a mini-player that follows you everywhere (Spotify) | 1 |
-| **Harmony lens:** function journey, chord clock, path on the harmony map, key journey | 1 |
+| **Harmony lens:** the Harmony Atlas (fixed addresses, the route the piece takes, satellites, footprint), the Living Clock (voice-leading morph), the Analysis Ribbon (numerals, resolution arrows, ii–V brackets, key boxes, pedals) | 1 |
 | Story cards per section (what's happening, in plain words) | 1 |
 | Tension curve and the whole-piece strip, linked to everything | 1 |
 | Tap any chord, note or name and its page opens in one tap | 1 |
@@ -54,7 +56,10 @@ curated (P22: the best features, not the most). Tiers: **1** = version 1 can't b
 | **Melody lens:** contour, intervals, motifs and where they return | 2 |
 | **Form lens:** sections, repetition arcs, self-similarity map | 2 |
 | **Sound lens:** instruments, register, texture, dynamics | 2 |
-| **Surprise:** how unexpected each moment is for its style (needs a corpus) | 2 |
+| **Tension braid:** roughness, distance from home and surprise as three strands | 2 |
+| **Ghost chords:** the likely next chords appear faintly before the real one lands (needs a corpus) | 2 |
+| **Form arcs:** repeated progressions joined by arcs | 2 |
+| **Keyscape:** the key of every stretch in one triangle; doubles as a scrubber and the piece's poster | 2 |
 | **Reduce slider:** strip the harmony from full voicing down to its skeleton (after Schenker) | 2 |
 | Score lens (engraved notation, voices drawn moving) for public-domain works | 2 |
 | Compare performances (tempo and rubato curves: Gould vs Schiff) | 3 |
