@@ -1,5 +1,6 @@
 // Router for the clickable prototype: every screen has a hash address.
-import { today, player } from "./screens/listen.js";
+const V = "20261011c";
+import { today, player } from "./screens/listen.js?v=20261011c";
 
 const ROUTES = { today, player };
 const MODULES = {
@@ -17,14 +18,15 @@ const ROUTE_H = { today: 0.62, piece: 0.62, player: 0.62, style: 0.74, shape: 1,
 function adapt(id) {
   if (THEME !== "adaptive") return;
   const c = hc(ROUTE_H[id] ?? 0.6), b = document.body.style;
-  b.setProperty("--paper", c.deep); b.setProperty("--paper-2", `color-mix(in oklab, ${c.deep} 88%, #ffffff 12%)`); b.setProperty("--card", `color-mix(in oklab, ${c.deep} 91%, #ffffff 9%)`);
+  b.setProperty("--paper", c.deep);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", c.deep); b.setProperty("--paper-2", `color-mix(in oklab, ${c.deep} 88%, #ffffff 12%)`); b.setProperty("--card", `color-mix(in oklab, ${c.deep} 91%, #ffffff 9%)`);
 }
 
 async function render() {
   const id = (location.hash.slice(1) || "today").split("?")[0];
   let fn = ROUTES[id];
   if (!fn && MODULES[id]) {
-    try { const mod = await import(`./screens/${MODULES[id]}.js`); fn = mod[id]; ROUTES[id] = fn; } catch (e) { console.error(e); }
+    try { const mod = await import(`./screens/${MODULES[id]}.js?v=${V}`); fn = mod[id]; ROUTES[id] = fn; } catch (e) { console.error(e); }
   }
   if (!fn) fn = today;
   adapt(id);

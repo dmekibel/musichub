@@ -28,7 +28,7 @@ export function today() {
       <a class="row" href="#lesson">${lesson}<span class="txt"><b>Lesson 3 · Hearing tension</b><span>4 minutes · uses the Prelude you just heard</span></span></a>
     </section>
     <p class="illus">Bach data is real. Other entries are illustrative for this mockup.</p>
-  `);
+  `, { mini: false });
 }
 
 // ---------- the Harmony Atlas: every function at a fixed address (after mDecks' Mapping Tonal Harmony)
