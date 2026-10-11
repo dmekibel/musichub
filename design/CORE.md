@@ -52,3 +52,15 @@ move and you hear it, see it in songs, and learn it.
 - The idea pages become move pages (a move, the songs it's in, how it works).
 - The analysis data needs a moves layer: a list of named spans per piece (Bach: going home bars 1–4, the trip to G,
   the passing squares, the long wait on G, the final arrival).
+
+## Decision after the labs (2026-10-11, late)
+Labs tried and judged: Light Score, Harmony Map, Journey and the wall of moves, the 10-lens slate, Harmony World, the
+honeycomb, the music chart, and 3D chord space. David doesn't read theory deeply and asked Claude to decide. The decision:
+- **The main screen is one smart chart** (the stock-chart idea), but layered *on top of itself* instead of stacked in
+  far-apart panes. One plot: the tension line, the chord blocks along its base, the bass drawn inside, the key and form as
+  background bands, cadences and squares as markers on the line. Extra detail appears only on tap or with the crosshair.
+- **The honeycomb is the second lens** (where the chord sits and how notes move), shown small beside or under the chart.
+- **3D is not the core.** Tymoczko's chord space is real math, but on a phone it reads as chaos. Keep it for a later,
+  carefully art-directed showpiece that shows one chord's neighbourhood, not the whole space.
+- **Process change:** no more quick rough prototypes. One screen, designed from references, polished as a static
+  mockup in the Dusk palette, then made interactive.
