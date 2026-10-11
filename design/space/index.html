@@ -20,6 +20,9 @@
   .ch small { font-size: .3em; font-stretch: 100%; font-weight: 650; letter-spacing: 0; margin-left: 8px; padding: 3px 9px; border-radius: 999px; color: #26283f; vertical-align: .9em; }
   .near { margin-top: 10px; font-size: 15px; color: var(--soft); max-width: 25em; } .near b { color: var(--ink); }
   .bottom { position: fixed; left: 0; right: 0; bottom: 0; padding: 30px 20px calc(14px + env(safe-area-inset-bottom)); background: linear-gradient(to top, rgba(34,36,74,.95) 60%, rgba(34,36,74,0)); }
+  .modes { display: inline-grid; grid-template-columns: 1fr 1fr; padding: 3px; border-radius: 999px; background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); }
+  .modes button { height: 32px; padding: 0 18px; border-radius: 999px; font-size: 13.5px; font-weight: 700; color: var(--soft); }
+  .modes button.on { background: var(--ink); color: #2c2f55; }
   .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
   .chip { flex: none; height: 30px; padding: 0 12px; border-radius: 999px; font-size: 12.5px; font-weight: 650; color: var(--soft); background: var(--glass); box-shadow: inset 0 0 0 1px var(--hair); display: inline-flex; align-items: center; gap: 6px; }
   .chip i { width: 8px; height: 8px; border-radius: 50%; }
@@ -35,12 +38,11 @@
 <div id="gl"></div>
 <header class="top"><div class="ttl"><b>Prelude in C</b> · Bach · chords as places in 3D</div><div class="ch" id="ch"></div><p class="near" id="near"></p></header>
 <section class="bottom">
-  <div class="chips" id="chips"></div>
+  <nav class="modes" id="modes"><button data-m="places" class="on">Places</button><button data-m="voices">Voices</button></nav>
   <div class="row"><button class="play" id="pp" aria-label="Play"></button><div class="t" id="t"></div></div>
-  <p class="hint">Drag to turn the space · pinch to zoom · tap a chord to hear it</p>
+  <p class="hint">Swipe to turn the board · tap a chord to hear it</p>
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script type="module" src="space.js?v=2"></script>
+<script type="module" src="space.js?v=7"></script>
 </body>
 </html>
