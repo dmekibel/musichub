@@ -106,3 +106,34 @@ export const ICON = {
   check: `<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   lock: `<svg viewBox="0 0 24 24"><rect x="6" y="11" width="12" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 11V8a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
 };
+
+// ---------- shell: the four rooms + the mini-player
+const ROOMS = [["today", "Today"], ["explore", "Explore"], ["learn", "Learn"], ["lab", "Lab"]];
+export function shell(room, body, { mini = true } = {}) {
+  const tabs = ROOMS.map(([id, label]) => `<a href="#${id}" class="${id === room ? "on" : ""}">${label}</a>`).join("");
+  const miniHTML = mini ? `<a class="mini" href="#player">
+      ${sleeve({ h: 0.62, shape: "wheel", data: { fns: "TSDTSDTSSDTDSDTSSDTDSDDDDDDDDDDTSDT".split("") }, size: "xs" })}
+      <span class="txt"><b>Prelude in C · Bach</b><span>bar 12 · C♯°7 · tension</span></span>
+      <span class="pl">${ICON.play}</span><span class="prog"><i style="width:33%"></i></span></a>` : "";
+  return `<main class="screen">${body}</main>${miniHTML}<nav class="tabbar">${tabs}</nav>`;
+}
+export const page = (body) => `<main class="screen full">${body}</main>`;
+
+export function roomHead(title) {
+  return `<header class="roomhead"><h1 class="disp">${title}</h1><a class="me" href="#you" aria-label="You">D</a></header>`;
+}
+export function topBar(title = "", right = ICON.share) {
+  return `<div class="topbar"><a class="ic" href="javascript:history.back()" aria-label="Back">${ICON.back}</a><span class="ttl">${title}</span><span class="ic">${right}</span></div>`;
+}
+
+// ---------- the Five Dials glyph: five symmetric shapes, each sized by strength
+const DIAL_SHAPES = { key: [0, 2, 4, 5, 7, 9, 11], squares: [0, 3, 6, 9], triangles: [0, 4, 8], hexagons: [0, 2, 4, 6, 8, 10], cluster: [11, 0, 1] };
+export const DIAL_NAMES = { key: "Key", squares: "Squares", triangles: "Triangles", hexagons: "Hexagons", cluster: "Cluster" };
+export function dialSVG(kind, v, color = "var(--ink)") {
+  const r = 14 + 22 * Math.sqrt(Math.max(0, Math.min(1, v)));
+  const pts = DIAL_SHAPES[kind].map((pc) => { const a = (pc / 12) * Math.PI * 2; return `${(50 + r * Math.sin(a)).toFixed(1)},${(50 - r * Math.cos(a)).toFixed(1)}`; }).join(" ");
+  return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="var(--hair)" stroke-width="2"/><polygon points="${pts}" fill="${color}" fill-opacity="${(0.25 + 0.75 * v).toFixed(2)}"/></svg>`;
+}
+export function dialsRow(d, notes = {}) {
+  return `<div class="dials">${Object.keys(DIAL_SHAPES).map((k) => `<div class="dl">${dialSVG(k, d[k])}<b>${DIAL_NAMES[k]}</b><span class="num">${d[k].toFixed(2)}${notes[k] ? ` · ${notes[k]}` : ""}</span></div>`).join("")}</div>`;
+}

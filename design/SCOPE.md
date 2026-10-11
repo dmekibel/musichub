@@ -28,6 +28,8 @@ The layer under everything (the Five Dials, the measures, how views relate, rese
 
 **Cut:** nothing. The tiers already hold the long tail.
 
+**Deferred by David (2026-10-11): "push features before building".** The ear gym goes to later. Build only the first slice, and keep everything else as designs and notes until he pulls it forward. The Key Wheel (§8 of SYSTEM.md) is designed and not built.
+
 How this list was made: David's own invention habits (DAVID-MODEL §3) run across all of music, then
 curated (P22: the best features, not the most). Tiers: **1** = version 1 can't be the product without it,
 **2** = next, **3** = later. Design comes after this list, not before.
@@ -111,7 +113,7 @@ curated (P22: the best features, not the most). Tiers: **1** = version 1 can't b
 | Feature | Tier |
 |---|---|
 | **Path:** one linear journey (Duolingo). Each lesson mixes hear, see, name and play, and every example is a real piece | 1 |
-| **Ear gym:** intervals, chord qualities, functions, progressions; adaptive, with "For you" and "Choose" (ColorHub's Train) | 1 |
+| **Ear gym:** intervals, chord qualities, functions, progressions; adaptive, with "For you" and "Choose" (ColorHub's Train) | 3 (David: later) |
 | Spaced review across days; "yours" means recognized on a later day | 1 |
 | "Learn this" on any page (a chord page becomes a 2-minute lesson) | 2 |
 | **Masters courses:** Barry Harris, Bach chorales, Jobim, Coltrane, maqam basics, raga basics, blues | 2 |

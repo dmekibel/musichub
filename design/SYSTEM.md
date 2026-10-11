@@ -126,3 +126,18 @@ The method follows ColorHub's honesty rules: every finding shows its n, its corp
 - **Capture + MIDI export:** the paying feature for producers and songwriters. Tier 2.
 - **Findings** as a first-class part of Explore, with a research pipeline over the archive. Tier 2.
 - **Phase torus** (Yust): pieces as paths on a donut of key × triad direction, a Lab showpiece. Tier 3.
+
+## 8. Learned from Brian Callipari's chord webs (David's references, 2026-10-11)
+- **Diagram 1, keys × chords:** angle = key on the circle of fifths, radius = scale degree. Bands join the same
+  chord across keys, which makes pivot chords (the doors between keys) visible.
+- **Diagram 2, function rings:** outer ring = each key with its relative minor, middle = dominants, inner =
+  diminished chords. Lines across the centre join diminished chords that are the same chord, so the three
+  squares show up as hubs connecting keys.
+- **What MusicHub takes (designed, not built yet; David: defer builds):**
+  - A **Key Wheel**, the all-keys zoom-out of the Harmony Atlas. Angle = key, rings = function, and the
+    **three squares sit at the centre as hubs**. A piece's modulation draws as a route around the wheel; the
+    Bach Prelude lights all three hubs.
+  - Pivot bands, drawn when a piece changes key ("Am belongs to both C and G").
+  - Chord quality as the node's **shape** (its polygon on the clock), so hue stays reserved for harmony
+    (function).
+- **More examples:** being collected in `DIAGRAMS-CATALOG.md`.
